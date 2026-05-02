@@ -4,22 +4,29 @@ using Unity.Mathematics;    // For ECS authoring/baking(?).
 
 
 
-/* TO-DO:
-- Write a MonoBehaviour author class and a Baker<AuthorClassName> class for each class.
-- Write a public IComponentData struct for each class.
-*/
+
+
+// THIS IS A DEPRECATED FILE USED FOR REFERENCE WHEN IMPLEMENTING INDIVIDUAL BUILDINGS. DO NOT MODIFY.
+
+
 
 
 
 // The interface for all buildings (Miners, Furnaces, Crafters, Belts(?))
 interface IBuilding
 {
+    // Static Constants
     protected static const int minResourceID = 0;                           // Minimum resource ID. Likely never to be changed.
     protected static const int maxResourceID = 15;                          // Maximum resource ID (inclusive). Only changed in case maximum number of resources increases.
+    // Resource Lists
     protected int[] acceptedResources;                                      // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] inventory = [0] * (maxResourceID - minResourceID + 1);  // Currently-stored items accessed via resourceID.
+    // Plain Old Data
+    protected int maxStackSize;                                             // Maximum inventory size for any one resource (in and out).
+    protected int totalInventorySize;                                       // Maximum combined inventory size for all resources.
     protected float cooldown;                                               // Cooldown in seconds between operations. Restraining maximum precision to milliseconds would be preferable (excl. fractions).
     protected bool running = false;                                         // Is the machine operating (has input need met and output capacity available).
+    protected bool open = true;                                             // Is the machine able to receive resources?
 
     /**
       * @brief attempts to send a resource to a neighboring building.
@@ -34,15 +41,15 @@ interface IBuilding
       * @param resourceID   An integer in the range [0, 15] determining received resource type.
       * @returns 0 or -1: 0 if succeeds, -1 if fails.
       */
-    protected int Receive(in int resourceID);
+    protected int Receive(in Vector2 direction, in int resourceID);
 
-    protected void TurnOff()
+    protected static void TurnOff()
     {
         running = false;
         return;
     }
 
-    protected void TurnOn()
+    protected static void TurnOn()
     {
         running = true;
         return;
