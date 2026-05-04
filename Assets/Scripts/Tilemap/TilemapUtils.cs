@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Unity.Collections;
 using Unity.Mathematics;
 
 /// <summary>
@@ -10,6 +11,11 @@ public static class TilemapUtils
     /// Size of a chunk.
     /// </summary>
     public const int CHUNK_SIZE = 32;
+
+    /// <summary>
+    /// All currently loaded chunks in the system.
+    /// </summary>
+    public static NativeHashMap<int2, TilemapChunk> LoadedChunks;
 
     /// <summary>
     /// Given a tile coordiante in world-space, calculate the coordinate of the tile local to its containing chunk.

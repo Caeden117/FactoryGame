@@ -10,14 +10,9 @@ using static TilemapUtils;
 public readonly struct TilemapChunk : IComponentData, IDisposable
 {
     /// <summary>
-    /// X coordinate of this chunk, in chunk-space.
+    /// Coordiantes of this chunk, in chunk-space.
     /// </summary>
-    public readonly int ChunkX;
-    
-    /// <summary>
-    /// Y coordinate of this chunk, in chunk-space.
-    /// </summary>
-    public readonly int ChunkY;
+    public readonly int2 ChunkCoordinates;
 
     /// <summary>
     /// Flattened 2D array of tile data associated with this chunk.
@@ -25,10 +20,9 @@ public readonly struct TilemapChunk : IComponentData, IDisposable
     // Needs to be this NativeArray container as regular C# arrays are managed types unsupported by ECS.
     public readonly NativeArray<TileData> TilemapData;
 
-    public TilemapChunk(int chunkX, int chunkY)
+    public TilemapChunk(int2 chunkCoords)
     {
-        ChunkX = chunkX;
-        ChunkY = chunkY;
+        ChunkCoordinates = chunkCoords;
         TilemapData = new NativeArray<TileData>(CHUNK_SIZE * CHUNK_SIZE, Allocator.Persistent);
     }
 
