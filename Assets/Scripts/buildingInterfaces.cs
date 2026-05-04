@@ -6,6 +6,16 @@ using Unity.Entities;       // For ECS utilization.
 
 
 
+// Recipe implementation for Furnaces and Crafters.
+struct Recipe
+{
+    private int[] acceptedResources;
+    private float cooldown;
+    private int outputResource;    
+}
+
+
+
 // Our interface for enforcing building data uniformity. All buildings will utilize these variables.
 interface IBuildingComponent
 {
@@ -17,12 +27,14 @@ interface IBuildingComponent
     // ###### Resource Lists ######
     protected int[] acceptedResources;                                      // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] inventory = [0] * (maxResourceID - minResourceID + 1);  // Currently-stored items accessed via resourceID.
+    protected int outputResouce = -1;
     // ###### Plain Old Data ######
     protected int maxStackSize;                                             // Maximum inventory size for any one resource (in and out).
     protected int totalInventorySize;                                       // Maximum combined inventory size for all resources.
     protected float cooldown;                                               // Cooldown in seconds between operations. Restraining maximum precision to milliseconds would be preferable (excl. fractions).
     protected bool running = false;                                         // Is the machine operating (has input need met and output capacity available).
     protected bool open = true;                                             // Is the machine able to receive resources?
+    protected Recipe recipe;                                    
 }
 
 

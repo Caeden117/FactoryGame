@@ -76,7 +76,7 @@ class Crafter : IBuilding
 class Belt : IBuilding
 {
     private readonly Vector2 ReceivingDirection;  // Static Vector2 (i.e. Vector2.down) used for receiving items.
-    public readonly Vector2 SendingDirection;     // Static Vector2 (i.e. Vector2.up) used for sending items.
+    private readonly Vector2 SendingDirection;     // Static Vector2 (i.e. Vector2.up) used for sending items.
     private readonly int CurrentItem;             // Inventory handler integer to account for              
 
     public void OnUpdate(ref SystemState state)
