@@ -6,12 +6,12 @@ using Unity.Entities;   // For ECS utilization.
 // ##### COMPONENT SEGMENT #####
 
 // Author Class
-public class CrafterAuthoring : MonoBehaviour, IBuildingComponent
+public class CrafterAuthoring : IBuildingComponent
 {
     // Defining member variables.
-    protected int[] acceptedResources = [];                 // Crafters are output-only; no inputs are accepted.
-    protected int maxStackSize = processorStackSize;        // Non-belt building stack size assignment.
-    protected int totalInventorySize = processorStackSize;  // 1 output slot = 1 * stack size.
+    private new int maxStackSize;         // Non-belt building stack size assignment.
+    private int totalInventorySize = processorStackSize;   // 1 output slot = 1 * stack size.
+    private Recipe recipe;
 }
 
 // Baker Class
@@ -33,11 +33,12 @@ public class CrafterBaker : Baker<CrafterAuthoring>
 }
 
 // Component Struct
-public struct CrafterComponent : IComponentData, IBuildingComponent
+public struct CrafterComponent : IComponentData
 {
-    protected int[] acceptedResources;  // Crafters are output-only; no inputs are accepted.
-    protected int maxStackSize;         // Non-belt building stack size assignment.
-    protected int totalInventorySize;   // 1 output slot = 1 * stack size.
+    // TO-DO: MAKE A BUFFER.
+    int acceptedResources;  // Crafters are output-only; no inputs are accepted.
+    int maxStackSize;         // Non-belt building stack size assignment.
+    int totalInventorySize;   // 1 output slot = 1 * stack size.
 }
 
 
@@ -47,6 +48,11 @@ public struct CrafterComponent : IComponentData, IBuildingComponent
 // System Partial Struct
 public partial struct CrafterSystem : ISystem, IBuildingSystem
 {
+    protected bool Act(ref IBuildingComponent crafter)
+    {
+        return false;
+    }
+
     public void OnUpdate(ref SystemState state)
     {
         // Collecting DeltaTime property from Entities.SystemAPI.Time.
