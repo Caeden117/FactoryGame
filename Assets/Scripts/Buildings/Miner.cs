@@ -1,5 +1,4 @@
-using UnityEngine;          // For functionality. 
-using System;               // For WeakReference.
+using UnityEngine;          // For functionality.
 
 
 
@@ -7,14 +6,30 @@ using System;               // For WeakReference.
 public class Miner : AbstractBuilding
 {
 
-
-    // ##### VIRTUAL MEMBER VARIABLE OVERRIDES #####
+    // ##### MEMBER VARIABLE OVERRIDES #####
     protected override int OutputResource { get; set; } = 0;
+    protected override int InventoryTotal { get; set; } = 100;
+    protected override int MaxInventorySize { get; set; } = 100;
+    protected override float Cooldown { get; set; } = 2.0f;
+    protected override float Progress { get; set; } = 0.0f;
+    protected override bool IsRunning { get; set; } = true;
+    protected float ActTimer;
+
 
     // ##### METHODS #####
 
+    // Building-unique Methods
+    protected bool Mine()
+    {
+        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize && InventoryTotal < MaxInventorySize;
+        if(canMine)
+        {
+            Inventory[OutputResource]++;
+        }   
+        return canMine;
+    }
 
-    // ##### Method Overrides #####
+    // Method Overrides
     /**
       * @brief Receives a resource. Typically invoked via another Building's Send() call. Abstracted to accomodate void terminals.
       * @param resourceID   The integer value corresponding to a resource's ID.
@@ -32,19 +47,37 @@ public class Miner : AbstractBuilding
       */
     override public void Act()
     {
-        return;
+        ActTimer -= Time.deltaTime;
+        if(ActTimer <= 0)
+        {
+            bool canMine = Mine();
+            bool canSend = Send(OutputResource);
+            IsRunning = canMine || canSend;
+            ActTimer = Cooldown;
+        }
     }
 
-    // ##### Unity Methods #####
+    // Unity Methods
 
     void OnCreate()
     {
-        
+        ActTimer = Cooldown;
+        // Attempt to attach to Receiver building.
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f)) 
+        {
+           if(potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
+            {
+                Receiver = toBeReceiver;
+                Receiver.Sender = this;
+            }
+        }
+        // No sender for Miners as they have no input slot.
     }
 
     void OnDestroy()
     {
-        
+        Sender = null;
+        Receiver = null;
     }
 
 }

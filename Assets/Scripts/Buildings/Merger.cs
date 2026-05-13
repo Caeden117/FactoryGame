@@ -8,8 +8,9 @@ public class Merger : AbstractBuilding
 {
 
 
-    // ##### VIRTUAL MEMBER VARIABLE OVERRIDES #####
-
+    // ##### MEMBER VARIABLE OVERRIDES #####
+    public AbstractBuilding LeftSender { get; set; } = null;  // The building sending outputs to this building from this building's left. null when empty or deleted.
+    public AbstractBuilding RightSender { get; set; } = null; // The building receiving outputs from this building. null when empty or deleted.
 
     // ##### METHODS #####
 

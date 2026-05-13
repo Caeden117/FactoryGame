@@ -8,7 +8,7 @@ public class Splitter : AbstractBuilding
 {
 
 
-    // ##### VIRTUAL MEMBER VARIABLE OVERRIDES #####
+    // ##### MEMBER VARIABLE OVERRIDES #####
 
 
     // ##### METHODS #####

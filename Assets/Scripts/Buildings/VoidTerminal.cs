@@ -7,15 +7,24 @@ using System;               // For WeakReference.
 public class VoidTerminal : AbstractBuilding
 {
 
-
-    // ##### VIRTUAL MEMBER VARIABLE OVERRIDES #####
+    // ##### MEMBER VARIABLE OVERRIDES #####
+    protected override bool IsRunning { get; set; } = false;
 
 
     // ##### METHODS #####
 
-
-    // ##### Method Overrides #####
-    
+    // Method Overrides
+    /**
+      * @brief Receives a resource. Typically invoked via another Building's Send() call. Abstracted to accomodate void terminals.
+      * @param resourceID   The integer value corresponding to a resource's ID.
+      * @param sender       The building sending the resource. Defaults to the 'this' keyword in Send().
+      * @returns A boolean of whether or not the receive action succeeded.
+      */
+    override protected bool Receive(in int resourceID, in AbstractBuilding sender)
+    {
+        InventoryTotal++;
+        return true;
+    }
 
     /**
       * @brief The function called during the onUpdate() override.
@@ -23,6 +32,12 @@ public class VoidTerminal : AbstractBuilding
       */
     override public void Act()
     {
+        IsRunning = 0 < InventoryTotal;
+        if(IsRunning)
+        {
+            InventoryTotal--;
+            // TO-DO: [Future] Implement money counter based on resourceID here.
+        }
         return;
     }
 
@@ -30,12 +45,21 @@ public class VoidTerminal : AbstractBuilding
 
     void OnCreate()
     {
-        
+        // No receivers for void terminals as they have no output slot.
+        // Attempt to attach to Sender building.
+        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f)) 
+        {
+           if(potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
+            {
+                Sender = toBeSender;
+                Sender.Receiver = this;
+            }
+        }
     }
 
     void OnDestroy()
     {
-        
+        Sender = null;
     }
 
 }
