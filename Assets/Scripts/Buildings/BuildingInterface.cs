@@ -12,21 +12,21 @@ public abstract class AbstractBuilding : MonoBehaviour
 
 
     // ###### Constants ######
-    protected const int minResourceID = 0;                                              // Minimum resource ID. Likely never to be changed.
-    protected const int maxResourceID = 15;                                             // Maximum resource ID (inclusive). Only changed in case maximum number of resources increases.
-    protected const int processorStackSize = 100;                                       // Maximum stack size for all non-belt buildings.
-    // ###### Abstracts ######
-    protected bool[] acceptedResources = new bool[maxResourceID - minResourceID + 1];   // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
-    protected int[] inventory= new int[maxResourceID - minResourceID + 1];              // Currently-stored items accessed via resourceID.
-    protected int inventoryTotal = 0;                                                   // The total number of items stored combined across all items.
-    protected int outputResource = -1;                                                  // The integer ID of the resource being output. Must fit range [minResourceID, maxResourceID].
-    protected int maxStackSize = processorStackSize;                                    // Maximum inventory size for any one resource (in and out).
-    protected int maxInventorySize = -1;                                                // Maximum combined inventory size for all resources.
-    protected float cooldown = -1.0f;                                                   // Cooldown in seconds between operations. Values below 1/60 (~0.016667) will be treated as 1/60.
-    protected float progress = -1.0f;                                                   // [0.0, 1.0] as a normalized scalar of progress.
-    protected bool isRunning = false;                                                   // Is the building operating (has input need met and output capacity available).
-    protected System.WeakReference sender = null;                                       // The building sending outputs to this building. null when empty or deleted.
-    protected System.WeakReference receiver = null;                                     // The building receiving outputs from this building. null when empty or deleted.
+    protected const int MinResourceID = 0;                                              // Minimum resource ID. Likely never to be changed.
+    protected const int MaxResourceID = 15;                                             // Maximum resource ID (inclusive). Only changed in case maximum number of resources increases.
+    protected const int ProcessorStackSize = 100;                                       // Maximum stack size for all non-belt buildings.
+    // ###### Virtual Variables ######
+    protected virtual bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];   // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
+    protected virtual int[] Inventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];              // Currently-stored items accessed via resourceID.
+    protected virtual int InventoryTotal { get; set; } = 0;                                                   // The total number of items stored combined across all items.
+    protected virtual int OutputResource { get; set; } = -1;                                                  // The integer ID of the resource being output. Must fit range [minResourceID, maxResourceID].
+    protected virtual int MaxStackSize { get; set; } = ProcessorStackSize;                                    // Maximum inventory size for any one resource (in and out).
+    protected virtual int MaxInventorySize { get; set; } = -1;                                                // Maximum combined inventory size for all resources.
+    protected virtual float Cooldown { get; set; } = -1.0f;                                                   // Cooldown in seconds between operations. Values below 1/60 (~0.016667) will be treated as 1/60.
+    protected virtual float Progress { get; set; } = -1.0f;                                                   // [0.0, 1.0] as a normalized scalar of progress.
+    protected virtual bool IsRunning { get; set; } = false;                                                   // Is the building operating (has input need met and output capacity available).
+    protected virtual System.WeakReference Sender { get; set; } = null;                                       // The building sending outputs to this building. null when empty or deleted.
+    protected virtual System.WeakReference Receiver { get; set; } = null;                                     // The building receiving outputs from this building. null when empty or deleted.
 
 
     // ##### METHODS #####
@@ -39,7 +39,7 @@ public abstract class AbstractBuilding : MonoBehaviour
       */
     protected void TogglePower(in bool running)
     {
-        isRunning = running;
+        IsRunning = running;
         return;
     }
 
@@ -48,18 +48,18 @@ public abstract class AbstractBuilding : MonoBehaviour
       * @param resourceID The integer value corresponding to a resource's ID.
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    protected bool Send(in int resourceID)
+    protected virtual bool Send(in int resourceID)
     {
-        bool validReceiver = receiver != null && receiver.IsAlive && receiver.Target != null && receiver.GetType() == typeof(AbstractBuilding);
-        bool canSend = outputResource != -1 && 0 < inventory[resourceID];
+        bool validReceiver = Receiver != null && Receiver.IsAlive && Receiver.Target != null && Receiver.GetType() == typeof(AbstractBuilding);
+        bool canSend = OutputResource != -1 && 0 < Inventory[resourceID];
         AbstractBuilding receiverProxy = null;
         if(canSend && validReceiver)
         {
-            receiverProxy = (AbstractBuilding)receiver.Target;
+            receiverProxy = (AbstractBuilding)Receiver.Target;
             if (receiverProxy.Receive(resourceID, this))
             {
-                inventory[resourceID]--;
-                inventoryTotal--;
+                Inventory[resourceID]--;
+                InventoryTotal--;
                 return true;
             }
         }
@@ -67,34 +67,27 @@ public abstract class AbstractBuilding : MonoBehaviour
     }
 
     /**
-      * @brief static default helper for Receive(); most buildings will proxy to this function via Receive().
+      * @brief Receives a resource. Typically invoked via another Building's Send() call. Abstracted to accomodate void terminals.
       * @param resourceID The integer value corresponding to a resource's ID.
       * @param sender       The object sending the resource. Defaults to 'this' in Send().
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    protected bool Store(in int resourceID, in AbstractBuilding inputSender)
+    protected virtual bool Receive(in int resourceID, in AbstractBuilding inputSender)
     {
-        bool canReceive = acceptedResources[resourceID] && inventory[resourceID] < maxStackSize && inventoryTotal < maxInventorySize;
-        bool validSender = sender != null && sender.IsAlive && sender.Target != null && sender.GetType() == typeof(AbstractBuilding);
+        bool canReceive = AcceptedResources[resourceID] && Inventory[resourceID] < MaxStackSize && InventoryTotal < MaxInventorySize;
+        bool validSender = Sender != null && Sender.IsAlive && Sender.Target != null && Sender.GetType() == typeof(AbstractBuilding);
         bool validInputSender = inputSender != null;
-        if(canReceive && validSender && validInputSender && inputSender == (AbstractBuilding)sender.Target)
+        if(canReceive && validSender && validInputSender && inputSender == (AbstractBuilding)Sender.Target)
         {
-            inventory[resourceID]++;
-            inventoryTotal++;
+            Inventory[resourceID]++;
+            InventoryTotal++;
             return true;
         }
         return false;
     }
 
     // ##### Abstract Methods #####
-    /**
-      * @brief Receives a resource. Typically invoked via another Building's Send() call. Abstracted to accomodate void terminals.
-      * @param resourceID   The integer value corresponding to a resource's ID.
-      * @param sender       The building sending the resource. Defaults to the 'this' keyword in Send().
-      * @returns A boolean of whether or not the receive action succeeded.
-      */
-    abstract protected bool Receive(in int resourceID, in AbstractBuilding inputSender);
-
+    
     /**
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.

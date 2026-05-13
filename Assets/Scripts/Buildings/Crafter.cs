@@ -1,78 +1,51 @@
+using UnityEngine;          // For functionality. 
+using System;               // For WeakReference.
 
 
 
+// Brief description.
+public class Crafter : AbstractBuilding
+{
 
 
-// THIS IS A REFERENCE OF THE ECS VERSION OF A BUILDING CHILD CLASS.
+    // ##### VIRTUAL MEMBER VARIABLE OVERRIDES #####
 
 
+    // ##### METHODS #####
 
 
+    // ##### Method Overrides #####
+    
 
-//using UnityEngine;      // For functionality. 
-//using Unity.Entities;   // For ECS utilization.
+    /**
+      * @brief The function called during the onUpdate() override.
+      * @returns A boolean of whether or not the send action succeeded.
+      */
+    override protected bool Act()
+    {
+        return false;
+    }
 
+    // ##### Unity Methods #####
 
+    void Start()
+    {
+        
+    }
 
-//// ##### COMPONENT SEGMENT #####
+    void Update()
+    {
+        
+    }
 
-//// Author Class
-//public class CrafterAuthoring : IBuildingComponent
-//{
-//    // Defining member variables.
-//    private new int maxStackSize;         // Non-belt building stack size assignment.
-//    private int totalInventorySize = processorStackSize;   // 1 output slot = 1 * stack size.
-//    private Recipe recipe;
-//}
+    void OnCreate()
+    {
+        
+    }
 
-//// Baker Class
-//public class CrafterBaker : Baker<CrafterAuthoring>
-//{
-//    public override void Bake(CrafterAuthoring authoring)
-//    {
-//        // Assigning an ECS-created GameObject to "entity".
-//        var entity = GetEntity(authoring);
-//        // Making an instance of the CrafterComponent struct and assigning it to "entity".
-//        var crafter = new CrafterComponent
-//        {
-//            acceptedResources = authoring.acceptedResources,
-//            maxStackSize = authoring.processorStackSize,
-//            totalInventorySize = authoring.totalInventorySize
-//        };
-//        AddComponent(entity, crafter);
-//    }
-//}
+    void OnDestroy()
+    {
+        
+    }
 
-//// Component Struct
-//public struct CrafterComponent : IComponentData
-//{
-//    // TO-DO: MAKE A BUFFER.
-//    int acceptedResources;  // Crafters are output-only; no inputs are accepted.
-//    int maxStackSize;         // Non-belt building stack size assignment.
-//    int totalInventorySize;   // 1 output slot = 1 * stack size.
-//}
-
-
-
-//// ##### SYSTEM SEGMENT #####
-
-//// System Partial Struct
-//public partial struct CrafterSystem : ISystem, IBuildingSystem
-//{
-//    protected bool Act(ref IBuildingComponent crafter)
-//    {
-//        return false;
-//    }
-
-//    public void OnUpdate(ref SystemState state)
-//    {
-//        // Collecting DeltaTime property from Entities.SystemAPI.Time.
-//        float deltaTime = SystemAPI.Time.DeltaTime;
-
-//        // Selecting all enttiies w/ a CrafterComponent using read-write access.
-//        foreach (CrafterComponent crafter in SystemAPI.Query<RefRW<CrafterComponent>>())
-//        {
-//            // TO-DO: Fill contents here for what crafters should do when they update.
-//        }
-//    }
-//}
+}
