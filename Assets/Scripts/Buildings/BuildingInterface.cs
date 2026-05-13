@@ -44,6 +44,40 @@ public abstract class AbstractBuilding : MonoBehaviour
     }
 
     /**
+      * @brief Assigns the sender connection for this building.
+      * @param inputSender The building sending resources to this building, or null to clear.
+      */
+    public void SetSender(AbstractBuilding inputSender)
+    {
+        sender = inputSender == null ? null : new WeakReference(inputSender);
+    }
+
+    /**
+      * @brief Assigns the receiver connection for this building.
+      * @param outputReceiver The building receiving resources from this building, or null to clear.
+      */
+    public void SetReceiver(AbstractBuilding outputReceiver)
+    {
+        receiver = outputReceiver == null ? null : new WeakReference(outputReceiver);
+    }
+
+    /**
+      * @brief Returns the current sender, if available.
+      */
+    public AbstractBuilding GetSender()
+    {
+        return sender == null ? null : sender.Target as AbstractBuilding;
+    }
+
+    /**
+      * @brief Returns the current receiver, if available.
+      */
+    public AbstractBuilding GetReceiver()
+    {
+        return receiver == null ? null : receiver.Target as AbstractBuilding;
+    }
+
+    /**
       * @brief Sends a resource.
       * @param resourceID The integer value corresponding to a resource's ID.
       * @returns A boolean of whether or not the receive action succeeded.
