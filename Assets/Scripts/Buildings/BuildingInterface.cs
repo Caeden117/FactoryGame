@@ -93,5 +93,5 @@ public abstract class AbstractBuilding : MonoBehaviour
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    abstract protected bool Act();
+    abstract public void Act();
 }

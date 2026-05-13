@@ -2,7 +2,7 @@ using UnityEngine;          // For functionality.
 
 
 
-// The main processor that triggers all 
+// The main processor that controls building updates.
 public class BuildingProcessor
 {
     void Update()
@@ -10,7 +10,8 @@ public class BuildingProcessor
         Object[] buildings = Object.FindObjectsByType<AbstractBuilding>();
         foreach (Object building in buildings)
         {
-            building.Act();
+            AbstractBuilding tempBuilding = (AbstractBuilding)building;
+            tempBuilding.Act();
         }
     }
 }

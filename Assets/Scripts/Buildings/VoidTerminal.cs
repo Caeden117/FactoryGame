@@ -21,13 +21,13 @@ public class VoidTerminal : AbstractBuilding
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    override protected bool Act()
+    override public void Act()
     {
-        return false;
+        return;
     }
 
     // ##### Unity Methods #####
-    
+
     void OnCreate()
     {
         
