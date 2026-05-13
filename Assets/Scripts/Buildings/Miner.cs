@@ -37,16 +37,6 @@ public class Miner : AbstractBuilding
 
     // ##### Unity Methods #####
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     void OnCreate()
     {
         

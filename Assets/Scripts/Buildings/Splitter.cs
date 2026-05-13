@@ -28,16 +28,6 @@ public class Splitter : AbstractBuilding
 
     // ##### Unity Methods #####
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     void OnCreate()
     {
         

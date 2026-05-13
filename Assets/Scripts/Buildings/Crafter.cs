@@ -28,16 +28,6 @@ public class Crafter : AbstractBuilding
 
     // ##### Unity Methods #####
 
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     void OnCreate()
     {
         
