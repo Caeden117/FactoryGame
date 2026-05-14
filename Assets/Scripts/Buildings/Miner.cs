@@ -7,13 +7,10 @@ public class Miner : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected override int OutputResource { get; set; } = 0;
-    protected override int InventoryTotal { get; set; } = 100;
-    protected override int MaxInventorySize { get; set; } = 100;
+    protected int OutputResource { get; set; } = 0;
     protected override float Cooldown { get; set; } = 2.0f;
     protected override float Progress { get; set; } = 0.0f;
     protected override bool IsRunning { get; set; } = true;
-    protected float ActTimer;
 
 
     // ##### METHODS #####
@@ -25,10 +22,10 @@ public class Miner : AbstractBuilding
       */
     protected bool Mine()
     {
-        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize && InventoryTotal < MaxInventorySize;
+        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize;
         if (canMine)
         {
-            Inventory[OutputResource]++;
+            Outventory[OutputResource]++;
         }
         return canMine;
     }
@@ -55,14 +52,14 @@ public class Miner : AbstractBuilding
         if (ActTimer <= 0)
         {
             bool canMine = Mine();
-            bool canSend = Send(OutputResource);
-            IsRunning = canMine || canSend;
+            bool canSend = Send(OutputResource, Receivers[0]);
+            TogglePower(canMine || canSend);
             ActTimer = Cooldown;
         }
     }
 
     // Unity Methods
-
+    // @brief Runs on creation of a miner building. Used for assigning initial cooldown and attached buildings.
     void OnCreate()
     {
         ActTimer = Cooldown;
@@ -71,17 +68,20 @@ public class Miner : AbstractBuilding
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
-                Receiver = toBeReceiver;
-                Receiver.Sender = this;
+                Receivers.Add(toBeReceiver);
+                toBeReceiver.Senders.Add(this);
             }
         }
         // No sender for Miners as they have no input slot.
     }
 
+    // Runs on deletion of a miner building. Used for manual garbage collection.
     void OnDestroy()
     {
-        Sender = null;
-        Receiver = null;
+        foreach(AbstractBuilding receiver in Receivers)
+        {
+            receiver = null;
+        }
     }
 
 }

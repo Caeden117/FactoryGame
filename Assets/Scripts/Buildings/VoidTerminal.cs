@@ -1,5 +1,4 @@
 using UnityEngine;          // For functionality. 
-using System;               // For WeakReference.
 
 
 
@@ -8,7 +7,7 @@ public class VoidTerminal : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected override bool IsRunning { get; set; } = false;
+    protected int Capacity { get; set; } = 0;
 
 
     // ##### METHODS #####
@@ -22,7 +21,7 @@ public class VoidTerminal : AbstractBuilding
       */
     override protected bool Receive(in int resourceID, in AbstractBuilding sender)
     {
-        InventoryTotal++;
+        Capacity++;
         return true;
     }
 
@@ -32,17 +31,17 @@ public class VoidTerminal : AbstractBuilding
       */
     override public void Act()
     {
-        IsRunning = 0 < InventoryTotal;
+        IsRunning = 0 < Capacity;
         if(IsRunning)
         {
-            InventoryTotal--;
+            Capacity--;
             // TO-DO: [Future] Implement money counter based on resourceID here.
         }
         return;
     }
 
     // ##### Unity Methods #####
-
+    // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
     void OnCreate()
     {
         // No receivers for void terminals as they have no output slot.
@@ -51,15 +50,19 @@ public class VoidTerminal : AbstractBuilding
         {
            if(potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
-                Sender = toBeSender;
-                Sender.Receiver = this;
+                Senders.Add(toBeSender);
+                toBeSender.Receivers.Add(this);
             }
         }
     }
 
+    // Runs on deletion of a void terminal building. Used for manual garbage collection.
     void OnDestroy()
     {
-        Sender = null;
+        foreach(AbstractBuilding sender in Senders)
+        {
+            sender = null;
+        }
     }
 
 }

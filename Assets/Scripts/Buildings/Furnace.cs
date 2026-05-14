@@ -1,5 +1,4 @@
-using UnityEngine;          // For functionality. 
-using System;               // For WeakReference.
+using UnityEngine;          // For functionality.
 
 
 
@@ -7,63 +6,83 @@ using System;               // For WeakReference.
 public class Furnace : AbstractBuilding
 {
 
-
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected override int OutputResource { get; set; } = -1;
-    protected override int InventoryTotal { get; set; } = 200;
-    protected override int MaxInventorySize { get; set; } = 200;
     protected override float Cooldown { get; set; } = 2.0f;
     protected override float Progress { get; set; } = 0.0f;
     protected override bool IsRunning { get; set; } = false;
-    protected float ActTimer;
     protected RecipeSO recipe = null;
+
 
     // ##### METHODS #####
 
     // Building-unique Methods
     /**
-      * @brief Converts ingredients into OutputResource.
+      * @brief Checks that a recipe is provided and that it can afford to function and provide full output.
+      * @returns A boolean of whether or not the recipe could be fulfilled effectively.
+      */
+    protected bool RecipeCheck()
+    {
+        // Edge Case Handling: No recipe set.
+        if(recipe == null)
+        {
+            return false;
+        }
+        // Checking that sufficient ingredients are stored.
+        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+        {
+            if(Inventory[ingredient.Item.Id] < ingredient.Amount)
+            {
+                return false;
+            }
+        }
+        // Checking that there is room for the output.
+        foreach(RecipeSO.Output output in recipe.Outputs)
+        {
+            if(MaxStackSize < Outventory[output.Item.Id] + output.Amount)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+      * @brief Converts ingredients into outputs according to recipe.
       * @returns A boolean of whether or not the smelt action succeeded.
       */
     protected bool Smelt()
     {
-        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize && InventoryTotal < MaxInventorySize;
-        if (canMine)
+        if(RecipeCheck())
+        // Decreasing ingredient stores according to recipe.
+        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
         {
-            Inventory[OutputResource]++;
+            Inventory[ingredient.Item.Id] -= ingredient.Amount;
         }
-        return canMine;
+        // Increasing output stores according to recipe.
+        foreach(RecipeSO.Output output in recipe.Outputs)
+        {
+            Outventory[output.Item.Id] += output.Amount;
+        }
+        return true;
     }
 
-    // ##### Method Overrides #####
-
+    // Method Overrides
     /**
       * @brief The function called during the onUpdate() override.
       */
     override public void Act()
     {
-        if (recipe != null)
+        ActTimer -= Time.deltaTime;
+        if(ActTimer <= 0)
         {
-            ActTimer -= ActTimer.deltaTime;
-            bool canCraft;
-            if (ActTimer <= 0)
-            {
-                foreach (Ingredient ingredient in recipe.Ingredients)
-                {
-
-                }
-            }
-        }
-        else
-        {
-            IsRunning = false;
-            ActTimer = Cooldown;
+            TogglePower(Smelt());
+            ResetProgress();
         }
         return;
     }
 
-    // ##### Unity Methods #####
-
+    // Unity Methods 
+    // @brief Runs on creation of a furnace building. Used for assigning initial cooldown and attached buildings.
     void OnCreate()
     {
         ActTimer = Cooldown;
@@ -72,8 +91,8 @@ public class Furnace : AbstractBuilding
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
-                Receiver = toBeReceiver;
-                Receiver.Sender = this;
+                Receivers.Add(toBeReceiver);
+                toBeReceiver.Senders.Add(this);
             }
         }
         // Attempt to attach to Sender building.
@@ -81,16 +100,23 @@ public class Furnace : AbstractBuilding
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
-                Sender = toBeSender;
-                Sender.Receiver = this;
+                Senders.Add(toBeSender);
+                toBeSender.Receivers.Add(this);
             }
         }
     }
 
+    // Runs on deletion of a furnace building. Used for manual garbage collection.
     void OnDestroy()
     {
-        Sender = null;
-        Receiver = null;
+        foreach(AbstractBuilding receiver in Receivers)
+        {
+            receiver = null;
+        }
+        foreach(AbstractBuilding sender in Senders)
+        {
+            sender = null;
+        }
     }
 
 }
