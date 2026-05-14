@@ -19,13 +19,17 @@ public class Miner : AbstractBuilding
     // ##### METHODS #####
 
     // Building-unique Methods
+    /**
+      * @brief Creates an OutputResource from scratch.
+      * @returns A boolean of whether or not the mine action succeeded.
+      */
     protected bool Mine()
     {
         bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize && InventoryTotal < MaxInventorySize;
-        if(canMine)
+        if (canMine)
         {
             Inventory[OutputResource]++;
-        }   
+        }
         return canMine;
     }
 
@@ -48,7 +52,7 @@ public class Miner : AbstractBuilding
     override public void Act()
     {
         ActTimer -= Time.deltaTime;
-        if(ActTimer <= 0)
+        if (ActTimer <= 0)
         {
             bool canMine = Mine();
             bool canSend = Send(OutputResource);
@@ -63,9 +67,9 @@ public class Miner : AbstractBuilding
     {
         ActTimer = Cooldown;
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f)) 
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
         {
-           if(potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
+            if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
                 Receiver = toBeReceiver;
                 Receiver.Sender = this;

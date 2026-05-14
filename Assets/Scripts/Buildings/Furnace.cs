@@ -20,19 +20,44 @@ public class Furnace : AbstractBuilding
 
     // ##### METHODS #####
 
+    // Building-unique Methods
+    /**
+      * @brief Converts ingredients into OutputResource.
+      * @returns A boolean of whether or not the smelt action succeeded.
+      */
+    protected bool Smelt()
+    {
+        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize && InventoryTotal < MaxInventorySize;
+        if (canMine)
+        {
+            Inventory[OutputResource]++;
+        }
+        return canMine;
+    }
 
     // ##### Method Overrides #####
-    
 
     /**
       * @brief The function called during the onUpdate() override.
-      * @returns A boolean of whether or not the send action succeeded.
       */
     override public void Act()
     {
-        if(recipe != null)
+        if (recipe != null)
         {
-            
+            ActTimer -= ActTimer.deltaTime;
+            bool canCraft;
+            if (ActTimer <= 0)
+            {
+                foreach (Ingredient ingredient in recipe.Ingredients)
+                {
+
+                }
+            }
+        }
+        else
+        {
+            IsRunning = false;
+            ActTimer = Cooldown;
         }
         return;
     }
@@ -43,18 +68,18 @@ public class Furnace : AbstractBuilding
     {
         ActTimer = Cooldown;
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f)) 
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
         {
-           if(potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
+            if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
                 Receiver = toBeReceiver;
                 Receiver.Sender = this;
             }
         }
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f)) 
+        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f))
         {
-           if(potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
+            if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
                 Sender = toBeSender;
                 Sender.Receiver = this;
