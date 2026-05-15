@@ -70,7 +70,7 @@ public class Furnace : AbstractBuilding
     /**
       * @brief The function called during the onUpdate() override.
       */
-    override public void Act()
+    override internal void Act()
     {
         ActTimer -= Time.deltaTime;
         if(ActTimer <= 0)
@@ -109,14 +109,7 @@ public class Furnace : AbstractBuilding
     // Runs on deletion of a furnace building. Used for manual garbage collection.
     void OnDestroy()
     {
-        foreach(AbstractBuilding receiver in Receivers)
-        {
-            receiver = null;
-        }
-        foreach(AbstractBuilding sender in Senders)
-        {
-            sender = null;
-        }
+        
     }
 
 }

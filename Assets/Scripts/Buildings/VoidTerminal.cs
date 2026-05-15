@@ -19,7 +19,7 @@ public class VoidTerminal : AbstractBuilding
       * @param sender       The building sending the resource. Defaults to the 'this' keyword in Send().
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    override protected bool Receive(in int resourceID, in AbstractBuilding sender)
+    override internal bool Receive(in int resourceID, AbstractBuilding sender)
     {
         Capacity++;
         return true;
@@ -29,7 +29,7 @@ public class VoidTerminal : AbstractBuilding
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    override public void Act()
+    override internal void Act()
     {
         IsRunning = 0 < Capacity;
         if(IsRunning)
@@ -44,6 +44,11 @@ public class VoidTerminal : AbstractBuilding
     // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
     void OnCreate()
     {
+        // Sets all resources to accepted.
+        for(int i = 0; i < AcceptedResources.Length; i++)
+        {
+            AcceptedResources[i] = true;
+        }
         // No receivers for void terminals as they have no output slot.
         // Attempt to attach to Sender building.
         if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f)) 
@@ -59,10 +64,7 @@ public class VoidTerminal : AbstractBuilding
     // Runs on deletion of a void terminal building. Used for manual garbage collection.
     void OnDestroy()
     {
-        foreach(AbstractBuilding sender in Senders)
-        {
-            sender = null;
-        }
+        
     }
 
 }

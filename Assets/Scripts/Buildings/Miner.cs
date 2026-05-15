@@ -37,7 +37,7 @@ public class Miner : AbstractBuilding
       * @param sender       The building sending the resource. Defaults to the 'this' keyword in Send().
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    override protected bool Receive(in int resourceID, in AbstractBuilding sender)
+    override internal bool Receive(in int resourceID, AbstractBuilding sender)
     {
         return false;
     }
@@ -46,15 +46,15 @@ public class Miner : AbstractBuilding
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    override public void Act()
+    override internal void Act()
     {
         ActTimer -= Time.deltaTime;
         if (ActTimer <= 0)
         {
             bool canMine = Mine();
-            bool canSend = Send(OutputResource, Receivers[0]);
+            bool canSend = Send(Outventory[OutputResource], Receivers[0]);
             TogglePower(canMine || canSend);
-            ActTimer = Cooldown;
+            ResetProgress();
         }
     }
 
@@ -78,10 +78,7 @@ public class Miner : AbstractBuilding
     // Runs on deletion of a miner building. Used for manual garbage collection.
     void OnDestroy()
     {
-        foreach(AbstractBuilding receiver in Receivers)
-        {
-            receiver = null;
-        }
+        
     }
 
 }

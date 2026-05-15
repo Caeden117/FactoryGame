@@ -71,7 +71,7 @@ public class Crafter : AbstractBuilding
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    override public void Act()
+    override internal void Act()
     {
         ActTimer -= Time.deltaTime;
         if(ActTimer <= 0)
@@ -110,14 +110,7 @@ public class Crafter : AbstractBuilding
     // Runs on deletion of a crafter building. Used for manual garbage collection.
     void OnDestroy()
     {
-        foreach(AbstractBuilding receiver in Receivers)
-        {
-            receiver = null;
-        }
-        foreach(AbstractBuilding sender in Senders)
-        {
-            sender = null;
-        }
+        
     }
 
 }

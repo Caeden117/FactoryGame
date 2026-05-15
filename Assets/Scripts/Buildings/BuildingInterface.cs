@@ -1,4 +1,5 @@
-using UnityEngine;          // For functionality.
+using UnityEngine;                  // For functionality.
+using System.Collections.Generic;   // For List<T>.
 
 
 
@@ -16,11 +17,11 @@ public abstract class AbstractBuilding : MonoBehaviour
     protected const int ProcessorStackSize = 100;                                                   // Maximum stack size for all non-belt buildings.
     protected const int MaxIOcount = 4;                                                             // Maximum number of input slots and maximum number of output slots.
     // ##### Non-virtual Member Variables #####
-    public bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];    // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
+    internal bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];    // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] Inventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];           // Currently-stored, received items accessed via resourceID.
     protected int[] Outventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];          // Currently-stored items to be delivered, accessed via resourceID.
-    public AbstractBuilding[] Senders { get; set; } = new AbstractBuilding[MaxIOcount];             // The building sending outputs to this building. null when empty or deleted.
-    public AbstractBuilding[] Receivers { get; set; } = new AbstractBuilding[MaxIOcount];           // The building receiving outputs from this building. null when empty or deleted.
+    internal List<AbstractBuilding> Senders { get; set; } = new List<AbstractBuilding>();             // The building sending outputs to this building. null when empty or deleted.
+    internal List<AbstractBuilding> Receivers { get; set; } = new List<AbstractBuilding>();           // The building receiving outputs from this building. null when empty or deleted.
     // ###### Virtual Variables ######
     protected virtual bool IsRunning { get; set; } = false;                                         // Is the building operating (has input need met and output capacity available).
     protected virtual int MaxStackSize { get; set; } = ProcessorStackSize;                          // Maximum inventory size for any one resource (in and out).
@@ -64,7 +65,7 @@ public abstract class AbstractBuilding : MonoBehaviour
       * @param resourceID The integer value corresponding to a resource's ID.
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    protected virtual bool Send(in int resourceID, in AbstractBuilding inputReceiver)
+    protected virtual bool Send(in int resourceID, AbstractBuilding inputReceiver)
     {
         bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
         bool canSend = 0 < Outventory[resourceID] && inputReceiver.AcceptedResources[resourceID];
@@ -85,7 +86,7 @@ public abstract class AbstractBuilding : MonoBehaviour
       * @param sender       The object sending the resource. Defaults to 'this' in Send().
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    protected virtual bool Receive(in int resourceID, in AbstractBuilding inputSender)
+    internal virtual bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
         bool canReceive = AcceptedResources[resourceID] && Inventory[resourceID] < MaxStackSize;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
@@ -103,5 +104,5 @@ public abstract class AbstractBuilding : MonoBehaviour
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    abstract public void Act();
+    abstract internal void Act();
 }
