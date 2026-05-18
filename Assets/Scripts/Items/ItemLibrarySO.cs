@@ -24,12 +24,18 @@ public class ItemLibrarySO : ScriptableObject
     {
         for (var i = 0; i < Items.Length; i++)
         {
-            Items[i].Id = i;
+            if (Items[i] != null)
+            {
+                Items[i].Id = i;
+            }
         }
 
         for (var i = 0; i < Recipes.Length; i++)
         {
-            Recipes[i].Id = i;
+            if (Items[i] != null)
+            {
+                Recipes[i].Id = i;
+            }
         }
     }
 }
