@@ -61,7 +61,7 @@ public class Merger : AbstractBuilding
         // Loop 1: Start at fairness tracker and try to send.
         for (int i = fairnessTracker; i < Senders.Count; i++)
         {
-            if (Senders[i] != null && Send(currentID, this))
+            if (Senders[i] != null && Receive(currentID, Senders[i]))
             {
                 fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
                 return;
@@ -70,7 +70,7 @@ public class Merger : AbstractBuilding
         // Loop 2: Start at 0 and go to fairness tracker and try to send.
         for (int i = 0; i < fairnessTracker; i++)
         {
-            if (Senders[i] != null && Send(currentID, this))
+            if (Senders[i] != null && Receive(currentID, Senders[i]))
             {
                 fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
                 return;
