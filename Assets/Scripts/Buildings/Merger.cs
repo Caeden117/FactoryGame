@@ -8,6 +8,7 @@ public class Merger : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected int currentID = -1;
+    protected int fairnessTracker = 0;  // Used for distributing evenly when multiple receivers maintain open states.
 
     // ##### METHODS #####
 
@@ -21,7 +22,7 @@ public class Merger : AbstractBuilding
     {
         bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
         bool canSend = inputReceiver.AcceptedResources[resourceID];
-        if(canSend && validReceiver)
+        if (canSend && validReceiver)
         {
             if (inputReceiver.Receive(resourceID, this))
             {
@@ -40,9 +41,9 @@ public class Merger : AbstractBuilding
       */
     override internal bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        bool canReceive =  currentID == -1 && Outventory[resourceID] < MaxStackSize;
+        bool canReceive = currentID == -1 && Outventory[resourceID] < MaxStackSize;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
-        if(canReceive && validSender)
+        if (canReceive && validSender)
         {
             currentID = resourceID;
             return true;
@@ -56,12 +57,28 @@ public class Merger : AbstractBuilding
       */
     override internal void Act()
     {
-        ActTimer -= Time.deltaTime;
-        if (ActTimer <= 0)
+        // Two Loops used to mimic a single loop starting partway thru and wrapping around (i.e. [0, 4] starting at 2, ending at 1).
+        // Loop 1: Start at fairness tracker and try to send.
+        for (int i = fairnessTracker; i < Senders.Count; i++)
         {
-            TogglePower(Send(currentID, Receivers[0]));
-            ResetProgress();
+            if (Senders[i] != null && Send(currentID, this))
+            {
+                fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
+                return;
+            }
         }
+        // Loop 2: Start at 0 and go to fairness tracker and try to send.
+        for (int i = 0; i < fairnessTracker; i++)
+        {
+            if (Senders[i] != null && Send(currentID, this))
+            {
+                fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
+                return;
+            }
+        }
+        // All sends failed; reset fairness tracker.
+        fairnessTracker = 0;
+        return;
     }
 
     // Unity Methods
@@ -70,7 +87,7 @@ public class Merger : AbstractBuilding
     {
         ActTimer = Cooldown;
         // Sets all resources to accepted.
-        for(int i = 0; i < AcceptedResources.Length; i++)
+        for (int i = 0; i < AcceptedResources.Length; i++)
         {
             AcceptedResources[i] = true;
         }
@@ -115,7 +132,7 @@ public class Merger : AbstractBuilding
     // Runs on deletion of a miner merger. Used for manual garbage collection.
     void OnDestroy()
     {
-        
+
     }
 
 }
