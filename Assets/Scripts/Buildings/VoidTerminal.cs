@@ -42,6 +42,11 @@ public class VoidTerminal : AbstractBuilding
 
     // ##### Unity Methods #####
     // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
+    void Start()
+    {
+        OnCreate();
+    }
+
     void OnCreate()
     {
         // Sets all resources to accepted.
@@ -51,7 +56,7 @@ public class VoidTerminal : AbstractBuilding
         }
         // No receivers for void terminals as they have no output slot.
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f)) 
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange)) 
         {
            if(potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
