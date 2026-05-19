@@ -7,10 +7,7 @@ public class Furnace : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected override float Cooldown { get; set; } = 2.0f;
-    protected override float Progress { get; set; } = 0.0f;
-    protected override bool IsRunning { get; set; } = false;
-    protected RecipeSO recipe = null;
+    protected RecipeSO Recipe = null;
 
 
     // ##### METHODS #####
@@ -23,12 +20,12 @@ public class Furnace : AbstractBuilding
     protected bool RecipeCheck()
     {
         // Edge Case Handling: No recipe set.
-        if(recipe == null)
+        if(Recipe == null)
         {
             return false;
         }
         // Checking that sufficient ingredients are stored.
-        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+        foreach (var ingredient in Recipe.Ingredients)
         {
             if(Inventory[ingredient.Item.Id] < ingredient.Amount)
             {
@@ -36,7 +33,7 @@ public class Furnace : AbstractBuilding
             }
         }
         // Checking that there is room for the output.
-        foreach(RecipeSO.Output output in recipe.Outputs)
+        foreach(var output in Recipe.Outputs)
         {
             if(MaxStackSize < Outventory[output.Item.Id] + output.Amount)
             {
@@ -54,12 +51,12 @@ public class Furnace : AbstractBuilding
     {
         if(RecipeCheck())
         // Decreasing ingredient stores according to recipe.
-        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+        foreach (var ingredient in Recipe.Ingredients)
         {
             Inventory[ingredient.Item.Id] -= ingredient.Amount;
         }
         // Increasing output stores according to recipe.
-        foreach(RecipeSO.Output output in recipe.Outputs)
+        foreach(var output in Recipe.Outputs)
         {
             Outventory[output.Item.Id] += output.Amount;
         }
@@ -70,7 +67,7 @@ public class Furnace : AbstractBuilding
     /**
       * @brief The function called during the onUpdate() override.
       */
-    override internal void Act()
+    internal override void Act()
     {
         ActTimer -= Time.deltaTime;
         if(ActTimer <= 0)
@@ -83,11 +80,19 @@ public class Furnace : AbstractBuilding
 
     // Unity Methods 
     // @brief Runs on creation of a furnace building. Used for assigning initial cooldown and attached buildings.
-    void OnCreate()
+    private void Start()
     {
+        OnCreate();
+    }
+
+    private void OnCreate()
+    {
+        Cooldown = 2.0f;
+        Progress = 0.0f;
+        IsRunning = false;
         ActTimer = Cooldown;
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out var potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
@@ -96,7 +101,7 @@ public class Furnace : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out var potentialSender, ConnectionRange))
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
@@ -104,12 +109,6 @@ public class Furnace : AbstractBuilding
                 toBeSender.Receivers.Add(this);
             }
         }
-    }
-
-    // Runs on deletion of a furnace building. Used for manual garbage collection.
-    void OnDestroy()
-    {
-        
     }
 
 }
