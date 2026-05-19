@@ -7,9 +7,6 @@ public class Crafter : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected override float Cooldown { get; set; } = 2.0f;
-    protected override float Progress { get; set; } = 0.0f;
-    protected override bool IsRunning { get; set; } = false;
     protected RecipeSO recipe = null;
 
 
@@ -84,11 +81,14 @@ public class Crafter : AbstractBuilding
 
     // Unity Methods
     // @brief Runs on creation of a crafter building. Used for assigning initial cooldown and attached buildings.
-    void OnCreate()
+    private void Start()
     {
+        Cooldown = 2.0f;
+        Progress = 0.0f;
+        IsRunning = false;
         ActTimer = Cooldown;
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
@@ -97,7 +97,7 @@ public class Crafter : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange))
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
