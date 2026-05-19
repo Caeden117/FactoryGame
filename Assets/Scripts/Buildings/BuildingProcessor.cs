@@ -3,7 +3,7 @@ using UnityEngine;          // For functionality.
 
 
 // The main processor that controls building updates.
-public class BuildingProcessor
+public class BuildingProcessor : MonoBehaviour
 {
     void Update()
     {
