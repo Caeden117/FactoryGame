@@ -16,6 +16,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     protected const int MaxResourceID = 15;                                                         // Maximum resource ID (inclusive). Only changed in case maximum number of resources increases.
     protected const int ProcessorStackSize = 100;                                                   // Maximum stack size for all non-belt buildings.
     protected const int MaxIOcount = 4;                                                             // Maximum number of input slots and maximum number of output slots.
+    [SerializeField] protected float ConnectionRange = 0.51f;                                                   // Raycast distance for automatic building linkage.
     // ##### Non-virtual Member Variables #####
     internal bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];    // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] Inventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];           // Currently-stored, received items accessed via resourceID.
