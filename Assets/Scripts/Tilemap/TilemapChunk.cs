@@ -61,12 +61,12 @@ public class TilemapChunk : MonoBehaviour
         {
             for (var y = 0; y < resourceTilemap.size.y; y++)
             {
-                var tile = tileArray[x + y * resourceTilemap.size.x];
+                var tile = tileArray[x + (y * resourceTilemap.size.x)];
                 if (tile is ResourceTile resourceTile)
                 {
                     var cellPosition = new Vector3Int(x, y, 0) + resourceTilemap.cellBounds.min;
                     var quantity = resourceQuantities.ContainsKey(cellPosition) ? resourceQuantities[cellPosition] : resourceTile.ResourceQuantity;
-                    Debug.Log($"Discovered resource at {cellPosition} with quantity {quantity}");
+                    resourceQuantities[cellPosition] = quantity;
                 }
             }
         }
