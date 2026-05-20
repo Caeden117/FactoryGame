@@ -8,9 +8,6 @@ public class Miner : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected int OutputResource { get; set; } = 0;
-    protected override float Cooldown { get; set; } = 2.0f;
-    protected override float Progress { get; set; } = 0.0f;
-    protected override bool IsRunning { get; set; } = true;
 
 
     // ##### METHODS #####
@@ -22,7 +19,7 @@ public class Miner : AbstractBuilding
       */
     protected bool Mine()
     {
-        bool canMine = OutputResource != -1 && Inventory[OutputResource] < MaxStackSize;
+        var canMine = OutputResource != -1 && Outventory[OutputResource] < MaxStackSize;
         if (canMine)
         {
             Outventory[OutputResource]++;
@@ -37,7 +34,7 @@ public class Miner : AbstractBuilding
       * @param sender       The building sending the resource. Defaults to the 'this' keyword in Send().
       * @returns A boolean of whether or not the receive action succeeded.
       */
-    override internal bool Receive(in int resourceID, AbstractBuilding sender)
+    internal override bool Receive(in int resourceID, AbstractBuilding sender)
     {
         return false;
     }
@@ -46,13 +43,13 @@ public class Miner : AbstractBuilding
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.
       */
-    override internal void Act()
+    internal override void Act()
     {
         ActTimer -= Time.deltaTime;
         if (ActTimer <= 0)
         {
-            bool canMine = Mine();
-            bool canSend = Send(Outventory[OutputResource], Receivers[0]);
+            var canMine = Mine();
+            var canSend = Receivers.Count > 0 && Send(OutputResource, Receivers[0]);
             TogglePower(canMine || canSend);
             ResetProgress();
         }
@@ -60,11 +57,19 @@ public class Miner : AbstractBuilding
 
     // Unity Methods
     // @brief Runs on creation of a miner building. Used for assigning initial cooldown and attached buildings.
-    void OnCreate()
+    private void Start()
     {
+        OnCreate();
+    }
+
+    private void OnCreate()
+    {
+        Cooldown = 2.0f;
+        Progress = 0.0f;
+        IsRunning = true;
         ActTimer = Cooldown;
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out var potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {

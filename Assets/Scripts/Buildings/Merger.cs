@@ -83,7 +83,7 @@ public class Merger : AbstractBuilding
 
     // Unity Methods
     // @brief Runs on creation of a merger building. Used for assigning initial cooldown and attached buildings.
-    void OnCreate()
+    private void Start()
     {
         ActTimer = Cooldown;
         // Sets all resources to accepted.
@@ -92,7 +92,7 @@ public class Merger : AbstractBuilding
             AcceptedResources[i] = true;
         }
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
@@ -101,7 +101,7 @@ public class Merger : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building left of merger.
-        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftSender, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftSender, ConnectionRange))
         {
             if (potentialLeftSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeLeftSender))
             {
@@ -110,7 +110,7 @@ public class Merger : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building in behind merger.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange))
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
@@ -119,7 +119,7 @@ public class Merger : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building right of merger.
-        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightSender, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightSender, ConnectionRange))
         {
             if (potentialRightSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeRightSender))
             {

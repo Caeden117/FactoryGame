@@ -83,7 +83,7 @@ public class Splitter : AbstractBuilding
 
     // Unity Methods
     // @brief Runs on creation of a splitter building. Used for assigning initial cooldown and attached buildings.
-    void OnCreate()
+    private void Start()
     {
         ActTimer = Cooldown;
         // Sets all resources to accepted.
@@ -92,7 +92,7 @@ public class Splitter : AbstractBuilding
             AcceptedResources[i] = true;
         }
         // Attempt to attach to Receiver building left of merger.
-        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftReceiver, ConnectionRange))
         {
             if (potentialLeftReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeLeftReceiver))
             {
@@ -101,7 +101,7 @@ public class Splitter : AbstractBuilding
             }
         }
         // Attempt to attach to Receiver building in front of merger.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
@@ -110,7 +110,7 @@ public class Splitter : AbstractBuilding
             }
         }
         // Attempt to attach to Receiver building right of merger.
-        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightReceiver, 1.0f))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightReceiver, ConnectionRange))
         {
             if (potentialRightReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeRightReceiver))
             {
@@ -119,7 +119,7 @@ public class Splitter : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialSender, 1.0f))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange))
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
