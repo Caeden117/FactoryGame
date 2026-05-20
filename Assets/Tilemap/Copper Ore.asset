@@ -9,28 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+  m_Script: {fileID: 11500000, guid: f38ee58a75ff84ff78131566b9543612, type: 3}
   m_Name: Copper Ore
-  m_EditorClassIdentifier: UnityEngine.dll::UnityEngine.Tilemaps.Tile
-  m_Sprite: {fileID: 2922516699652220835, guid: 55f5ddb96ea1047fcb05a798fe5ad2fe, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Transform:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  m_InstancedGameObject: {fileID: 0}
-  m_Flags: 1
-  m_ColliderType: 1
+  m_EditorClassIdentifier: Main::ResourceTile
+  ResourceSprite: {fileID: 2922516699652220835, guid: 55f5ddb96ea1047fcb05a798fe5ad2fe, type: 3}
+  ResourceItem: {fileID: 11400000, guid: 0e01e12df24204710b3d1c5d9ea9768e, type: 2}
+  ResourceQuantity: 100
