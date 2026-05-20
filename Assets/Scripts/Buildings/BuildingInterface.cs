@@ -16,20 +16,21 @@ public abstract class AbstractBuilding : MonoBehaviour
     protected const int MaxResourceID = 15;                                                         // Maximum resource ID (inclusive). Only changed in case maximum number of resources increases.
     protected const int ProcessorStackSize = 100;                                                   // Maximum stack size for all non-belt buildings.
     protected const int MaxIOcount = 4;                                                             // Maximum number of input slots and maximum number of output slots.
-    [SerializeField] protected float ConnectionRange = 0.51f;                                                   // Raycast distance for automatic building linkage.
     // ##### Non-virtual Member Variables #####
-    internal bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];    // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
+    [SerializeField] protected float ConnectionRange = 0.51f;                                       // Raycast distance for automatic building linkage.
+    protected TilemapChunk tm = FindObjectsByType<TilemapChunk>()[0];
+    internal bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];  // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] Inventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];           // Currently-stored, received items accessed via resourceID.
     protected int[] Outventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];          // Currently-stored items to be delivered, accessed via resourceID.
-    internal List<AbstractBuilding> Senders { get; set; } = new List<AbstractBuilding>();             // The building sending outputs to this building. null when empty or deleted.
-    internal List<AbstractBuilding> Receivers { get; set; } = new List<AbstractBuilding>();           // The building receiving outputs from this building. null when empty or deleted.
+    internal List<AbstractBuilding> Senders { get; set; } = new List<AbstractBuilding>();           // The building sending outputs to this building. null when empty or deleted.
+    internal List<AbstractBuilding> Receivers { get; set; } = new List<AbstractBuilding>();         // The building receiving outputs from this building. null when empty or deleted.
     // ###### Virtual Variables ######
     protected virtual bool IsRunning { get; set; } = false;                                         // Is the building operating (has input need met and output capacity available).
     protected virtual int MaxStackSize { get; set; } = ProcessorStackSize;                          // Maximum inventory size for any one resource (in and out).
     protected virtual float Cooldown { get; set; } = 1.0f;                                          // Cooldown in seconds between operations. Values below 1/60 (~0.016667) will be treated as 1/60.
     protected virtual float Progress { get; set; } = 0.0f;                                          // [0.0f, 1.0f] as a normalized scalar of progress.
     protected virtual float ActTimer { get; set; } = 1.0f;                                          // Cooldown tracker in seconds. Typically set equal to Cooldown in OnCreate() method.
-    
+
 
 
     // ##### METHODS #####
@@ -43,7 +44,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     protected void TogglePower(in bool running)
     {
         IsRunning = running;
-        if(!IsRunning)
+        if (!IsRunning)
         {
             ResetProgress();
         }
@@ -70,7 +71,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     {
         bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
         bool canSend = 0 < Outventory[resourceID] && inputReceiver.AcceptedResources[resourceID];
-        if(canSend && validReceiver)
+        if (canSend && validReceiver)
         {
             if (inputReceiver.Receive(resourceID, this))
             {
@@ -91,7 +92,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     {
         bool canReceive = AcceptedResources[resourceID] && Inventory[resourceID] < MaxStackSize;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
-        if(canReceive && validSender)
+        if (canReceive && validSender)
         {
             Inventory[resourceID]++;
             return true;
@@ -99,8 +100,13 @@ public abstract class AbstractBuilding : MonoBehaviour
         return false;
     }
 
+    internal virtual void Update()
+    {
+        Act();
+    }
+
     // ##### Abstract Methods #####
-    
+
     /**
       * @brief The function called during the onUpdate() override.
       * @returns A boolean of whether or not the send action succeeded.

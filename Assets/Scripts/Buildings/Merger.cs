@@ -129,10 +129,4 @@ public class Merger : AbstractBuilding
         }
     }
 
-    // Runs on deletion of a miner merger. Used for manual garbage collection.
-    void OnDestroy()
-    {
-
-    }
-
 }

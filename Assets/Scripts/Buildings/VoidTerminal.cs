@@ -7,7 +7,7 @@ public class VoidTerminal : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected int Capacity { get; set; } = 0;
+    protected int currentID = -1;
 
 
     // ##### METHODS #####
@@ -21,8 +21,12 @@ public class VoidTerminal : AbstractBuilding
       */
     override internal bool Receive(in int resourceID, AbstractBuilding sender)
     {
-        Capacity++;
-        return true;
+        if (currentID == -1)
+        {
+            currentID = resourceID;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -31,10 +35,10 @@ public class VoidTerminal : AbstractBuilding
       */
     override internal void Act()
     {
-        IsRunning = 0 < Capacity;
-        if(IsRunning)
+        IsRunning = currentID != -1;
+        if (IsRunning)
         {
-            Capacity--;
+            currentID = -1;
             // TO-DO: [Future] Implement money counter based on resourceID here.
         }
         return;
@@ -50,26 +54,20 @@ public class VoidTerminal : AbstractBuilding
     void OnCreate()
     {
         // Sets all resources to accepted.
-        for(int i = 0; i < AcceptedResources.Length; i++)
+        for (int i = 0; i < AcceptedResources.Length; i++)
         {
             AcceptedResources[i] = true;
         }
         // No receivers for void terminals as they have no output slot.
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange)) 
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange))
         {
-           if(potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
+            if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
                 Senders.Add(toBeSender);
                 toBeSender.Receivers.Add(this);
             }
         }
-    }
-
-    // Runs on deletion of a void terminal building. Used for manual garbage collection.
-    void OnDestroy()
-    {
-        
     }
 
 }

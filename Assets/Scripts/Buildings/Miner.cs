@@ -7,7 +7,7 @@ public class Miner : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected int OutputResource { get; set; } = 0;
+    protected ItemSO miningResource = null;
 
 
     // ##### METHODS #####
@@ -19,12 +19,13 @@ public class Miner : AbstractBuilding
       */
     protected bool Mine()
     {
-        var canMine = OutputResource != -1 && Outventory[OutputResource] < MaxStackSize;
-        if (canMine)
+        miningResource = tm.GetResourceAt(transform.position);
+        if (miningResource != null && tm.DrillResourceAt(transform.position))
         {
-            Outventory[OutputResource]++;
+            Outventory[miningResource.Id]++;
+            return true;
         }
-        return canMine;
+        return false;
     }
 
     // Method Overrides
@@ -49,7 +50,7 @@ public class Miner : AbstractBuilding
         if (ActTimer <= 0)
         {
             var canMine = Mine();
-            var canSend = Receivers.Count > 0 && Send(OutputResource, Receivers[0]);
+            var canSend = Receivers.Count > 0 && Send(miningResource.Id, Receivers[0]);
             TogglePower(canMine || canSend);
             ResetProgress();
         }
@@ -80,10 +81,6 @@ public class Miner : AbstractBuilding
         // No sender for Miners as they have no input slot.
     }
 
-    // Runs on deletion of a miner building. Used for manual garbage collection.
-    void OnDestroy()
-    {
-        
-    }
+
 
 }

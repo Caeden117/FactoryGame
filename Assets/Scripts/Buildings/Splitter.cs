@@ -21,18 +21,18 @@ public class Splitter : AbstractBuilding
     {
         // Two Loops used to mimic a single loop starting partway thru and wrapping around (i.e. [0, 4] starting at 2, ending at 1).
         // Loop 1: Start at fairness tracker and try to send.
-        for(int i = fairnessTracker; i < Receivers.Count; i++)
+        for (int i = fairnessTracker; i < Receivers.Count; i++)
         {
-            if(Receivers[i] != null && Send(currentID, this))
+            if (Receivers[i] != null && Send(currentID, this))
             {
                 fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
                 return;
             }
         }
         // Loop 2: Start at 0 and go to fairness tracker and try to send.
-        for(int i = 0; i < fairnessTracker; i++)
+        for (int i = 0; i < fairnessTracker; i++)
         {
-            if(Receivers[i] != null && Send(currentID, this))
+            if (Receivers[i] != null && Send(currentID, this))
             {
                 fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
                 return;
@@ -52,7 +52,7 @@ public class Splitter : AbstractBuilding
     {
         bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
         bool canSend = inputReceiver.AcceptedResources[resourceID];
-        if(canSend && validReceiver)
+        if (canSend && validReceiver)
         {
             if (inputReceiver.Receive(resourceID, this))
             {
@@ -71,9 +71,9 @@ public class Splitter : AbstractBuilding
       */
     override internal bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        bool canReceive =  currentID == -1 && Outventory[resourceID] < MaxStackSize;
+        bool canReceive = currentID == -1 && Outventory[resourceID] < MaxStackSize;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
-        if(canReceive && validSender)
+        if (canReceive && validSender)
         {
             currentID = resourceID;
             return true;
@@ -87,7 +87,7 @@ public class Splitter : AbstractBuilding
     {
         ActTimer = Cooldown;
         // Sets all resources to accepted.
-        for(int i = 0; i < AcceptedResources.Length; i++)
+        for (int i = 0; i < AcceptedResources.Length; i++)
         {
             AcceptedResources[i] = true;
         }
@@ -127,12 +127,6 @@ public class Splitter : AbstractBuilding
                 toBeSender.Receivers.Add(this);
             }
         }
-    }
-
-    // Runs on deletion of a splitter building. Used for manual garbage collection.
-    void OnDestroy()
-    {
-        
     }
 
 }

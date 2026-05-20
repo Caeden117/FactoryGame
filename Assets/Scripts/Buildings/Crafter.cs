@@ -20,22 +20,22 @@ public class Crafter : AbstractBuilding
     protected bool RecipeCheck()
     {
         // Edge Case Handling: No recipe set.
-        if(recipe == null)
+        if (recipe == null)
         {
             return false;
         }
         // Checking that sufficient ingredients are stored.
         foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
         {
-            if(Inventory[ingredient.Item.Id] < ingredient.Amount)
+            if (Inventory[ingredient.Item.Id] < ingredient.Amount)
             {
                 return false;
             }
         }
         // Checking that there is room for the output.
-        foreach(RecipeSO.Output output in recipe.Outputs)
+        foreach (RecipeSO.Output output in recipe.Outputs)
         {
-            if(MaxStackSize < Outventory[output.Item.Id] + output.Amount)
+            if (MaxStackSize < Outventory[output.Item.Id] + output.Amount)
             {
                 return false;
             }
@@ -49,14 +49,14 @@ public class Crafter : AbstractBuilding
       */
     protected bool Craft()
     {
-        if(RecipeCheck())
-        // Decreasing ingredient stores according to recipe.
-        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
-        {
-            Inventory[ingredient.Item.Id] -= ingredient.Amount;
-        }
+        if (RecipeCheck())
+            // Decreasing ingredient stores according to recipe.
+            foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+            {
+                Inventory[ingredient.Item.Id] -= ingredient.Amount;
+            }
         // Increasing output stores according to recipe.
-        foreach(RecipeSO.Output output in recipe.Outputs)
+        foreach (RecipeSO.Output output in recipe.Outputs)
         {
             Outventory[output.Item.Id] += output.Amount;
         }
@@ -71,7 +71,7 @@ public class Crafter : AbstractBuilding
     override internal void Act()
     {
         ActTimer -= Time.deltaTime;
-        if(ActTimer <= 0)
+        if (ActTimer <= 0)
         {
             TogglePower(Craft());
             ResetProgress();
@@ -105,12 +105,6 @@ public class Crafter : AbstractBuilding
                 toBeSender.Receivers.Add(this);
             }
         }
-    }
-
-    // Runs on deletion of a crafter building. Used for manual garbage collection.
-    void OnDestroy()
-    {
-        
     }
 
 }
