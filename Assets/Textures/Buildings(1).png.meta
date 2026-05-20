@@ -1,22 +1,10 @@
 fileFormatVersion: 2
-guid: f8c4638d75132ef40abc78949ebd5f83
+guid: 13de26e9ebbda72469baa45550df574e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8078966772632430244
-    second: Buildings_0
-  - first:
-      213: -3985759516408998331
-    second: Buildings_1
-  - first:
-      213: -7011020414044352858
-    second: Buildings_2
-  - first:
-      213: -5075879681021990956
-    second: Buildings_3
-  - first:
-      213: -1327783827800691072
-    second: Buildings_4
+      213: -4252148458359415931
+    second: Buildings(1)_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,11 +113,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Buildings_0
+      name: Buildings(1)_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 8
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -137,25 +125,21 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape:
-      - - {x: 0, y: -16}
-        - {x: 16, y: 0}
-        - {x: 0, y: 16}
-        - {x: -16, y: 0}
-      tessellationDetail: 0
+      physicsShape: []
+      tessellationDetail: -1
       bones: []
-      spriteID: c595f05468eb1ef80800000000000000
-      internalID: -8078966772632430244
+      spriteID: 58b134781855df4c0800000000000000
+      internalID: -4252148458359415931
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Buildings_1
+      name: Buildings(1)_1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 7
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -166,18 +150,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cfc60f0d4b1dc38448515d83b7066235
-      internalID: 1834870167
+      spriteID: 297f91c90d56956428f32c879173a3e8
+      internalID: 1956874281
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Buildings_2
+      name: Buildings(1)_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 6
+        x: 64
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -188,124 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab87636d5a278924bb5d8830c4370932
-      internalID: 54011868
+      spriteID: a7e609b9fd3769d438493eb48addde2d
+      internalID: 2066658090
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Buildings_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 5
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac2d5467d317b10408c55a9c6a4ca0ce
-      internalID: -1244022543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Buildings_4
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 4
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 25ed87ec2708fcc4d9fed71a855eb813
-      internalID: -1322421127
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Buildings_5
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 3
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 57671fb9ad75236448412b1a36f9015a
-      internalID: 1296032076
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Buildings_6
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 2
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 16272261d2b22d740be1a77cdd4b0be3
-      internalID: -169638675
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Buildings_7
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: aa72084425f9e424895f080ec1d9c599
-      internalID: -1787747948
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Buildings_8
+      name: Buildings(1)_3
       rect:
         serializedVersion: 2
         x: 0
@@ -320,8 +194,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87e6b6d6531678142b519da69d3e2b6f
-      internalID: 1908492902
+      spriteID: b88b258b34ea19d479becce6e156513f
+      internalID: -1786572335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Buildings(1)_4
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99f0d88caf0defe45a032f0065027c33
+      internalID: 263217352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Buildings(1)_5
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29c8696d6bd2bc24091eb4fea60ce2c1
+      internalID: -451679002
       vertices: []
       indices: 
       edges: []
@@ -330,7 +248,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 9f1a332bd5e226d4faf06853d533c9f2
+    spriteID: 8f9e74e3b17fac040a7164ac2a76d6cb
     internalID: 0
     vertices: []
     indices: 
@@ -340,17 +258,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":3,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Buildings_0: -8078966772632430244
-      Buildings_1: 1834870167
-      Buildings_2: 54011868
-      Buildings_3: -1244022543
-      Buildings_4: -1322421127
-      Buildings_5: 1296032076
-      Buildings_6: -169638675
-      Buildings_7: -1787747948
-      Buildings_8: 1908492902
+      Buildings(1)_0: -4252148458359415931
+      Buildings(1)_1: 1956874281
+      Buildings(1)_2: 2066658090
+      Buildings(1)_3: -1786572335
+      Buildings(1)_4: 263217352
+      Buildings(1)_5: -451679002
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
