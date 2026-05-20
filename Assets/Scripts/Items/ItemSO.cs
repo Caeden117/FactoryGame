@@ -23,7 +23,7 @@ public class ItemSO : ScriptableObject
     public Sprite Icon;
 
     /// <summary>
-    /// The maximum stack size for this item.
+    /// The value of the item.
     /// </summary>
-    public int MaxStackSize = 100;
+    public int MoneyValue = 1;
 }
