@@ -7,7 +7,8 @@ public class Crafter : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected RecipeSO recipe = null;
+    private RecipeSO recipe = null;
+    [SerializeField] private RecipeSO[] FurnaceRecipes = new RecipeSO[2];
 
 
     // ##### METHODS #####

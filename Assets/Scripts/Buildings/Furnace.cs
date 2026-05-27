@@ -7,7 +7,8 @@ public class Furnace : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected RecipeSO Recipe = null;
+    private RecipeSO Recipe = null;
+    [SerializeField] private RecipeSO[] FurnaceRecipes = new RecipeSO[2];
 
 
     // ##### METHODS #####
@@ -20,22 +21,22 @@ public class Furnace : AbstractBuilding
     protected bool RecipeCheck()
     {
         // Edge Case Handling: No recipe set.
-        if(Recipe == null)
+        if (Recipe == null)
         {
             return false;
         }
         // Checking that sufficient ingredients are stored.
         foreach (var ingredient in Recipe.Ingredients)
         {
-            if(Inventory[ingredient.Item.Id] < ingredient.Amount)
+            if (Inventory[ingredient.Item.Id] < ingredient.Amount)
             {
                 return false;
             }
         }
         // Checking that there is room for the output.
-        foreach(var output in Recipe.Outputs)
+        foreach (var output in Recipe.Outputs)
         {
-            if(MaxStackSize < Outventory[output.Item.Id] + output.Amount)
+            if (MaxStackSize < Outventory[output.Item.Id] + output.Amount)
             {
                 return false;
             }
@@ -49,14 +50,14 @@ public class Furnace : AbstractBuilding
       */
     protected bool Smelt()
     {
-        if(RecipeCheck())
-        // Decreasing ingredient stores according to recipe.
-        foreach (var ingredient in Recipe.Ingredients)
-        {
-            Inventory[ingredient.Item.Id] -= ingredient.Amount;
-        }
+        if (RecipeCheck())
+            // Decreasing ingredient stores according to recipe.
+            foreach (var ingredient in Recipe.Ingredients)
+            {
+                Inventory[ingredient.Item.Id] -= ingredient.Amount;
+            }
         // Increasing output stores according to recipe.
-        foreach(var output in Recipe.Outputs)
+        foreach (var output in Recipe.Outputs)
         {
             Outventory[output.Item.Id] += output.Amount;
         }
@@ -70,7 +71,7 @@ public class Furnace : AbstractBuilding
     internal override void Act()
     {
         ActTimer -= Time.deltaTime;
-        if(ActTimer <= 0)
+        if (ActTimer <= 0)
         {
             TogglePower(Smelt());
             ResetProgress();
@@ -81,11 +82,6 @@ public class Furnace : AbstractBuilding
     // Unity Methods 
     // @brief Runs on creation of a furnace building. Used for assigning initial cooldown and attached buildings.
     private void Start()
-    {
-        OnCreate();
-    }
-
-    private void OnCreate()
     {
         Cooldown = 2.0f;
         Progress = 0.0f;

@@ -149,32 +149,18 @@ public class Belt : AbstractBuilding
     // Receive/Send Overrides
     internal override bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        if (!isInitialized || slots == null || slots.Length == 0)
-        {
-            Debug.Log("Belt: Receive Failed");
-            return false;
-        }
+        if (!isInitialized || slots == null || slots.Length == 0) return false;
 
         var validSender = inputSender != null && Senders.Contains(inputSender);
-        if (!validSender) 
-        {
-            Debug.Log("Belt: Receive Failed");
-            return false;
-        }
-        if (!AcceptedResources[resourceID])
-        {
-            Debug.Log("Belt: Receive Failed");
-            return false;
-        }
+        if (!validSender) return false;
+        if (!AcceptedResources[resourceID]) return false;
         var tailIndex = slots.Length - 1;
         if (slots[tailIndex] == emptySlot)
         {
-            Debug.Log($"Belt: Receive resouceID \"{resourceID}\" from sender \"{inputSender}\" succeeded.");
             slots[tailIndex] = resourceID;
             CreateOrUpdateSlotVisual(tailIndex, resourceID);
             return true;
         }
-        Debug.Log("Belt: Receive Failed");
         return false;
     }
 
