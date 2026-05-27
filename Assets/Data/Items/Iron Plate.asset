@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Iron Plate
   m_EditorClassIdentifier: Main::ItemSO
   DisplayName: Iron Plate
-  Icon: {fileID: 0}
-  MaxStackSize: 100
+  Icon: {fileID: 1801263428120863714, guid: db196125c1c02564081283663c2e0234, type: 3}
+  MoneyValue: 6

@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9ed9b95770874e7f837ee48032019bd, type: 3}
-  m_Name: Smelt Iron Ore
+  m_Name: Iron Ingot To Iron Plate
   m_EditorClassIdentifier: Main::RecipeSO
   Ingredients:
-  - Item: {fileID: 11400000, guid: 69d519684e7e44be3a3de8fbf1c60fc7, type: 2}
-    Amount: 1
+  - Item: {fileID: 11400000, guid: ba08401953e7046008562262450ecc30, type: 2}
+    Amount: 3
+  - Item: {fileID: 11400000, guid: 148887bfb8b13495385cf2c8a9c045e8, type: 2}
+    Amount: 2
   Outputs:
   - Item: {fileID: 11400000, guid: 148887bfb8b13495385cf2c8a9c045e8, type: 2}
     Amount: 1
-  CraftingTime: 1
+  CraftingTime: 3

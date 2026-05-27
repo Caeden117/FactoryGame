@@ -60,13 +60,13 @@ public class Miner : AbstractBuilding
     // @brief Runs on creation of a miner building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        tm = FindObjectsByType<TilemapChunk>()[0];
+        tm = (TilemapChunk)FindAnyObjectByType(typeof(TilemapChunk));
         OnCreate();
     }
 
     private void OnCreate()
     {
-        Cooldown = 2.0f;
+        Cooldown = 1.0f;
         Progress = 0.0f;
         IsRunning = true;
         ActTimer = Cooldown;

@@ -149,20 +149,32 @@ public class Belt : AbstractBuilding
     // Receive/Send Overrides
     internal override bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        if (!isInitialized || slots == null || slots.Length == 0) return false;
+        if (!isInitialized || slots == null || slots.Length == 0)
+        {
+            Debug.Log("Belt: Receive Failed");
+            return false;
+        }
 
         var validSender = inputSender != null && Senders.Contains(inputSender);
-        if (!validSender) return false;
-        if (!AcceptedResources[resourceID]) return false;
-
+        if (!validSender) 
+        {
+            Debug.Log("Belt: Receive Failed");
+            return false;
+        }
+        if (!AcceptedResources[resourceID])
+        {
+            Debug.Log("Belt: Receive Failed");
+            return false;
+        }
         var tailIndex = slots.Length - 1;
         if (slots[tailIndex] == emptySlot)
         {
+            Debug.Log($"Belt: Receive resouceID \"{resourceID}\" from sender \"{inputSender}\" succeeded.");
             slots[tailIndex] = resourceID;
             CreateOrUpdateSlotVisual(tailIndex, resourceID);
             return true;
         }
-
+        Debug.Log("Belt: Receive Failed");
         return false;
     }
 
@@ -249,7 +261,7 @@ public class Belt : AbstractBuilding
 
             var spriteRenderer = slotVisual.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = GetItemSprite(resourceID);
-            spriteRenderer.sortingOrder = 10;
+            spriteRenderer.sortingOrder = 30;
 
             slotVisuals[slotIndex] = slotVisual;
         }
@@ -295,7 +307,6 @@ public class Belt : AbstractBuilding
                 return item.Icon;
             }
         }
-
         return GetSharedItemSprite();
     }
 }

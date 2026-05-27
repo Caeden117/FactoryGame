@@ -107,7 +107,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     /*
     internal virtual void Awake()
     {
-        tm = FindObjectsByType<TilemapChunk>()[0];
+        tm = FindAnyObjectByType(TilemapChunk);
     }
     */
 
