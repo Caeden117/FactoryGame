@@ -57,27 +57,12 @@ public class Merger : AbstractBuilding
       */
     override internal void Act()
     {
-        // Two Loops used to mimic a single loop starting partway thru and wrapping around (i.e. [0, 4] starting at 2, ending at 1).
-        // Loop 1: Start at fairness tracker and try to send.
-        for (int i = fairnessTracker; i < Senders.Count; i++)
+        ActTimer -= Time.deltaTime;
+        if (ActTimer <= 0)
         {
-            if (Senders[i] != null && Receive(currentID, Senders[i]))
-            {
-                fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
-                return;
-            }
+            // TogglePower(Send());
+            ResetProgress();
         }
-        // Loop 2: Start at 0 and go to fairness tracker and try to send.
-        for (int i = 0; i < fairnessTracker; i++)
-        {
-            if (Senders[i] != null && Receive(currentID, Senders[i]))
-            {
-                fairnessTracker = (i + 1) % Senders.Count;    // Modulus to clamp and wrap values within range.
-                return;
-            }
-        }
-        // All sends failed; reset fairness tracker.
-        fairnessTracker = 0;
         return;
     }
 
