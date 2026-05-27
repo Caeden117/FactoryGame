@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Item Library
   m_EditorClassIdentifier: Main::ItemLibrarySO
   Items:
-  - {fileID: 11400000, guid: 0e01e12df24204710b3d1c5d9ea9768e, type: 2}
-  - {fileID: 11400000, guid: a742e7cb282244aad82842911f819686, type: 2}
-  - {fileID: 11400000, guid: 1f1bf4fa8a23c43a38ba31942346305a, type: 2}
-  - {fileID: 11400000, guid: ba08401953e7046008562262450ecc30, type: 2}
   - {fileID: 11400000, guid: 69d519684e7e44be3a3de8fbf1c60fc7, type: 2}
+  - {fileID: 11400000, guid: 3b27003eb8ac81f4db98067fb9955cf8, type: 2}
   - {fileID: 11400000, guid: 148887bfb8b13495385cf2c8a9c045e8, type: 2}
+  - {fileID: 11400000, guid: 0e01e12df24204710b3d1c5d9ea9768e, type: 2}
+  - {fileID: 11400000, guid: dcc0201c82821864fa9a5970dea8386b, type: 2}
+  - {fileID: 11400000, guid: a742e7cb282244aad82842911f819686, type: 2}
   Recipes:
-  - {fileID: 11400000, guid: 4170ec25727fd4bf99238ce092332bab, type: 2}
-  - {fileID: 11400000, guid: a23989ee0b4164c7b8c8f90036f88fd9, type: 2}
-  - {fileID: 11400000, guid: 1901dd71bd3f54b9395cf729e450f36f, type: 2}
-  - {fileID: 11400000, guid: d8347acb7527d40a69b0471dbac8f95e, type: 2}
+  - {fileID: 11400000, guid: 231a93b25645f4543b13dc8f26f67996, type: 2}
+  - {fileID: 11400000, guid: 78ee780dda927f14bb57c2b977dc0a34, type: 2}
+  - {fileID: 11400000, guid: 8375ec037a7f05e45a036a1cbfb52692, type: 2}
+  - {fileID: 11400000, guid: 73820ec05dd86394aa8e587be67d8d80, type: 2}

@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9ed9b95770874e7f837ee48032019bd, type: 3}
-  m_Name: Craft Copper Wire
+  m_Name: Iron Ingot To Iron Plate
   m_EditorClassIdentifier: Main::RecipeSO
   Ingredients:
-  - Item: {fileID: 11400000, guid: a742e7cb282244aad82842911f819686, type: 2}
-    Amount: 1
+  - Item: {fileID: 11400000, guid: 3b27003eb8ac81f4db98067fb9955cf8, type: 2}
+    Amount: 3
   Outputs:
-  - Item: {fileID: 11400000, guid: 1f1bf4fa8a23c43a38ba31942346305a, type: 2}
-    Amount: 2
-  CraftingTime: 1
+  - Item: {fileID: 11400000, guid: 148887bfb8b13495385cf2c8a9c045e8, type: 2}
+    Amount: 1
+  CraftingTime: 3
