@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Copper Plate
   m_EditorClassIdentifier: Main::ItemSO
   DisplayName: Copper Plate
-  Icon: {fileID: -5971942374765049077, guid: db196125c1c02564081283663c2e0234, type: 3}
-  MoneyValue: 6
+  Icon: {fileID: 0}
+  MaxStackSize: 100

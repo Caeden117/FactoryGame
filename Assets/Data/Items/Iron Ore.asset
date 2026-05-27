@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Iron Ore
   m_EditorClassIdentifier: Main::ItemSO
   DisplayName: Iron Ore
-  Icon: {fileID: 8033092973025764044, guid: db196125c1c02564081283663c2e0234, type: 3}
-  MoneyValue: 1
+  Icon: {fileID: 0}
+  MaxStackSize: 100
