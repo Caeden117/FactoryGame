@@ -18,7 +18,7 @@ public abstract class AbstractBuilding : MonoBehaviour
     protected const int MaxIOcount = 4;                                                             // Maximum number of input slots and maximum number of output slots.
     // ##### Non-virtual Member Variables #####
     [SerializeField] protected float ConnectionRange = 0.51f;                                       // Raycast distance for automatic building linkage.
-    protected TilemapChunk tm = FindObjectsByType<TilemapChunk>()[0];
+    protected TilemapChunk tm;
     internal bool[] AcceptedResources { get; set; } = new bool[MaxResourceID - MinResourceID + 1];  // An integer list of accepted resources. Primarily used for Receive() and primarily set by the Recipe struct.
     protected int[] Inventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];           // Currently-stored, received items accessed via resourceID.
     protected int[] Outventory { get; set; } = new int[MaxResourceID - MinResourceID + 1];          // Currently-stored items to be delivered, accessed via resourceID.
@@ -104,6 +104,12 @@ public abstract class AbstractBuilding : MonoBehaviour
     {
         Act();
     }
+    /*
+    internal virtual void Awake()
+    {
+        tm = FindObjectsByType<TilemapChunk>()[0];
+    }
+    */
 
     // ##### Abstract Methods #####
 
