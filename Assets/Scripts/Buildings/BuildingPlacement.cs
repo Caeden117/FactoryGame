@@ -6,7 +6,7 @@ public class BuildingPlacement : MonoBehaviour
 {
     private bool isBuildMode = false;                           // Build Mode must be active to place buildings
     private bool isDeleteMode = false;                          // Delete mode removes placed buildings instead of placing new ones
-    [SerializeField] private GameObject[] buildPrefabs = new GameObject[3];      // Array of all buildings that can be placed
+    [SerializeField] private GameObject[] buildPrefabs = new GameObject[7];      // Array of all buildings that can be placed
     [SerializeField] private float gridSize = 1f;
     private int selectedIndex;                                  // Currently selected building
     private int rotationIndex;                                  // Rotation for placed building
@@ -72,7 +72,6 @@ public class BuildingPlacement : MonoBehaviour
         if (Keyboard.current.digit6Key.wasPressedThisFrame) { selectedIndex = 5; selectionChanged = true; }
         if (Keyboard.current.digit7Key.wasPressedThisFrame) { selectedIndex = 6; selectionChanged = true; }
         if (Keyboard.current.digit8Key.wasPressedThisFrame) { selectedIndex = 7; selectionChanged = true; }
-        if (Keyboard.current.digit9Key.wasPressedThisFrame) { selectedIndex = 8; selectionChanged = true; }
 
         if (selectionChanged)
         {
