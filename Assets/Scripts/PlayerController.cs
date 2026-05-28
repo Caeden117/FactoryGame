@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     // Cinemachine 2D Camera zoom control
     public InputAction ZoomAction;
     public CinemachineCamera Cam;
+    public InputAction ResetZoom;
     // Input action for player movement
     public InputAction MoveAction;
 
@@ -20,9 +21,9 @@ public class PlayerController : MonoBehaviour
     private Vector2 move;
 
     // Camera variables
-    [SerializeField] private float defaultZoom = 5f;
-    [SerializeField] private float minZoom = 2f;
-    [SerializeField] private float maxZoom = 20f;
+    [SerializeField] private float defaultZoom = 10f;
+    [SerializeField] private float minZoom = 5f;
+    [SerializeField] private float maxZoom = 30f;
 
     // Each mouse wheel tick will increase / decrease zoom by 10%
     [SerializeField] private float zoomPercentage = 0.10f;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         MoveAction.Enable();    
         ZoomAction.Enable();
+        ResetZoom.Enable();
 
         // Setup currentZoom and ensure it stays within bounds
         currentZoom = Mathf.Clamp(defaultZoom, minZoom, maxZoom);
@@ -52,12 +54,14 @@ public class PlayerController : MonoBehaviour
     {
         MoveAction.Enable();
         ZoomAction.Enable();
+        ResetZoom.Enable();
     }
 
     private void OnDisable()
     {
         MoveAction.Disable();
         ZoomAction.Disable();
+        ResetZoom.Disable();
     }
 
     private void Update()
@@ -65,28 +69,35 @@ public class PlayerController : MonoBehaviour
         //Get the movement vector from MoveAction InputAction variable
         move = MoveAction.ReadValue<Vector2>();
 
-        // ZoomAction can be bound to mouse scroll (Vector2) and/or keys (float)
-        // This allows zoom to be rebound, or have additional binds like ctrl+
-        var scrollVector = ZoomAction.ReadValue<Vector2>();
-        float scroll = 0;
-        if (!Mathf.Approximately(scrollVector.y, 0f)) scroll = scrollVector.y;
-        else scroll = ZoomAction.ReadValue<float>(); // for key bindings like ctrl+ / ctrl-
-        
-        if (!Mathf.Approximately(scroll, 0f))
+        if (ResetZoom.WasPressedThisFrame())
         {
-            var steps = Mathf.Max(1, Mathf.RoundToInt(Mathf.Abs(scroll)));
-            if (scroll > 0f)
+            currentZoom = Mathf.Clamp(defaultZoom, minZoom, maxZoom);
+        }
+        else
+        {
+            // ZoomAction can be bound to mouse scroll (Vector2) and/or keys (float)
+            // This allows zoom to be rebound, or have additional binds like ctrl+
+            var scrollVector = ZoomAction.ReadValue<Vector2>();
+            float scroll = 0;
+            if (!Mathf.Approximately(scrollVector.y, 0f)) scroll = scrollVector.y;
+            else scroll = ZoomAction.ReadValue<float>(); // for key bindings like ctrl+ / ctrl-
+            
+            if (!Mathf.Approximately(scroll, 0f))
             {
-                // Zoom in if mouse wheel up
-                currentZoom *= Mathf.Pow(1f - zoomPercentage, steps); 
-            } else
-            {
-                // Zoom out if mouse wheel down
-                currentZoom *= Mathf.Pow(1f + zoomPercentage, steps);                 
-            }
+                var steps = Mathf.Max(1, Mathf.RoundToInt(Mathf.Abs(scroll)));
+                if (scroll > 0f)
+                {
+                    // Zoom in if mouse wheel up
+                    currentZoom *= Mathf.Pow(1f - zoomPercentage, steps); 
+                } else
+                {
+                    // Zoom out if mouse wheel down
+                    currentZoom *= Mathf.Pow(1f + zoomPercentage, steps);                 
+                }
 
-            // Prevent zoom from going beyond limits
-            currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+                // Prevent zoom from going beyond limits
+                currentZoom = Mathf.Clamp(currentZoom, minZoom, maxZoom);
+            }
         }
 
         if(Cam != null)

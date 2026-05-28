@@ -98,7 +98,15 @@ MonoBehaviour:
     m_Id: 82a9ffa5-b057-433b-a6a7-65a63ccf6224
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings: []
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 892fce6c-cfcf-42c0-8247-6da412f4b69a
+      m_Path: <Keyboard>/z
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Reset Zoom
+      m_Flags: 0
     m_Flags: 0
   MoveAction:
     m_Name: Move
@@ -151,9 +159,9 @@ MonoBehaviour:
     m_Flags: 0
   speed: 10
   rb: {fileID: 0}
-  defaultZoom: 5
-  minZoom: 2
-  maxZoom: 15
+  defaultZoom: 10
+  minZoom: 5
+  maxZoom: 30
   zoomPercentage: 0.1
 --- !u!114 &5468303929054607993
 MonoBehaviour:
