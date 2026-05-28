@@ -8,7 +8,7 @@ public class VoidTerminal : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     public static int money = 0;
-    protected ItemLibrarySO il = null;
+    [SerializeField] protected ItemLibrarySO il;
     protected int currentID = -1;
 
 
@@ -50,7 +50,6 @@ public class VoidTerminal : AbstractBuilding
     // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
     void Start()
     {
-        il = (ItemLibrarySO)FindAnyObjectByType(typeof(ItemLibrarySO));
         // Sets all resources to accepted.
         for (int i = 0; i < AcceptedResources.Length; i++)
         {

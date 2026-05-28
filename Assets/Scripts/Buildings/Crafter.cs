@@ -7,8 +7,7 @@ public class Crafter : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    private RecipeSO recipe = null;
-    [SerializeField] private RecipeSO[] FurnaceRecipes = new RecipeSO[2];
+    [SerializeField] private RecipeSO recipe;
 
 
     // ##### METHODS #####
@@ -51,17 +50,20 @@ public class Crafter : AbstractBuilding
     protected bool Craft()
     {
         if (RecipeCheck())
+        {
             // Decreasing ingredient stores according to recipe.
             foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
             {
                 Inventory[ingredient.Item.Id] -= ingredient.Amount;
             }
-        // Increasing output stores according to recipe.
-        foreach (RecipeSO.Output output in recipe.Outputs)
-        {
-            Outventory[output.Item.Id] += output.Amount;
+            // Increasing output stores according to recipe.
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                Outventory[output.Item.Id] += output.Amount;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Method Overrides
@@ -74,7 +76,20 @@ public class Crafter : AbstractBuilding
         ActTimer -= Time.deltaTime;
         if (ActTimer <= 0)
         {
-            TogglePower(Craft());
+            bool canCraft = Craft();
+            bool canSend = false;
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                if(0 < Outventory[output.Item.Id])
+                {
+                    if(Send(output.Item.Id, Receivers[0]))
+                    {
+                        canSend = true;
+                        break;
+                    }
+                }
+            }
+            TogglePower(canCraft || canSend);
             ResetProgress();
         }
         return;
@@ -84,7 +99,11 @@ public class Crafter : AbstractBuilding
     // @brief Runs on creation of a crafter building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        Cooldown = 2.0f;
+        Cooldown = recipe.CraftingTime;
+        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+        { 
+            AcceptedResources[ingredient.Item.Id] = true;
+        }
         Progress = 0.0f;
         IsRunning = false;
         ActTimer = Cooldown;

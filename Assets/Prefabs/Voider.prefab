@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Main::VoidTerminal
   ConnectionRange: 0.51
+  il: {fileID: 11400000, guid: fde7cdbfcea65493a8ecaa0d2fd386f7, type: 2}
 --- !u!65 &4218889771271203101
 BoxCollider:
   m_ObjectHideFlags: 0

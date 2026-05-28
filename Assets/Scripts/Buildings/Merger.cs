@@ -8,7 +8,8 @@ public class Merger : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected int currentID = -1;
-    protected int fairnessTracker = 0;  // Used for distributing evenly when multiple receivers maintain open states.
+    [SerializeField] protected int fairnessTracker = 0;  // Used for distributing evenly when multiple receivers maintain open states.
+    protected int oldFairness = 0;
 
     // ##### METHODS #####
 
@@ -20,15 +21,11 @@ public class Merger : AbstractBuilding
       */
     override protected bool Send(in int resourceID, AbstractBuilding inputReceiver)
     {
-        bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
-        bool canSend = inputReceiver.AcceptedResources[resourceID];
-        if (canSend && validReceiver)
+        bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver) && resourceID != -1 && inputReceiver.AcceptedResources[resourceID];
+        if (validReceiver && inputReceiver.Receive(resourceID, this))
         {
-            if (inputReceiver.Receive(resourceID, this))
-            {
-                currentID = -1;
-                return true;
-            }
+            currentID = -1;
+            return true;
         }
         return false;
     }
@@ -41,10 +38,11 @@ public class Merger : AbstractBuilding
       */
     override internal bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        bool canReceive = currentID == -1 && Outventory[resourceID] < MaxStackSize;
+        bool canReceive = currentID == -1;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
-        if (canReceive && validSender)
+        if (canReceive && validSender && fairnessTracker == Senders.IndexOf(inputSender))
         {
+            fairnessTracker = (Senders.IndexOf(inputSender) + 1) % Senders.Count;
             currentID = resourceID;
             return true;
         }
@@ -60,8 +58,11 @@ public class Merger : AbstractBuilding
         ActTimer -= Time.deltaTime;
         if (ActTimer <= 0)
         {
-            // TogglePower(Send());
+            if(oldFairness == fairnessTracker)
+                fairnessTracker = (fairnessTracker + 1) % Senders.Count;
+            TogglePower(0 < Receivers.Count && Send(currentID, Receivers[0]));
             ResetProgress();
+            oldFairness = fairnessTracker;
         }
         return;
     }
@@ -76,6 +77,7 @@ public class Merger : AbstractBuilding
         {
             AcceptedResources[i] = true;
         }
+        Debug.Log($"Before: R:{Receivers.Count} | S:{Senders.Count}.");
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
@@ -83,15 +85,17 @@ public class Merger : AbstractBuilding
             {
                 Receivers.Add(toBeReceiver);
                 toBeReceiver.Senders.Add(this);
+                Debug.Log($"R0: {potentialReceiver.transform.position}.");
             }
         }
         // Attempt to attach to Sender building left of merger.
-        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftSender, ConnectionRange))
+        if (Physics.Raycast(transform.position, transform.up, out RaycastHit potentialLeftSender, ConnectionRange))
         {
             if (potentialLeftSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeLeftSender))
             {
                 Senders.Add(toBeLeftSender);
                 toBeLeftSender.Receivers.Add(this);
+                Debug.Log($"S0: {potentialLeftSender.transform.position}.");
             }
         }
         // Attempt to attach to Sender building in behind merger.
@@ -101,17 +105,20 @@ public class Merger : AbstractBuilding
             {
                 Senders.Add(toBeSender);
                 toBeSender.Receivers.Add(this);
+                Debug.Log($"S1: {potentialSender.transform.position}.");
             }
         }
         // Attempt to attach to Sender building right of merger.
-        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightSender, ConnectionRange))
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit potentialRightSender, ConnectionRange))
         {
             if (potentialRightSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeRightSender))
             {
                 Senders.Add(toBeRightSender);
                 toBeRightSender.Receivers.Add(this);
+                Debug.Log($"S2: {potentialRightSender.transform.position}.");
             }
         }
+        Debug.Log($"After: R:{Receivers.Count} | S:{Senders.Count}.");
     }
 
 }
