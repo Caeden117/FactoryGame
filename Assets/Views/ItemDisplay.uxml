@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; align-items: center;">
+        <ui:Image name="ItemSprite" source="project://database/Assets/Sprites/Items.png?fileID=8033092973025764044&amp;guid=db196125c1c02564081283663c2e0234&amp;type=3#Items_0" style="width: 50%; height: 50px;"/>
+        <ui:Label text="Item Name" name="ItemName" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" style="-unity-text-align: upper-center; font-size: 10px; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
+        <ui:Label text="1" name="ItemQuantity" selectable="false" focusable="false" double-click-selects-word="false" triple-click-selects-line="false" display-tooltip-when-elided="false" style="-unity-text-align: upper-center; font-size: 8px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;"/>
+    </ui:VisualElement>
+</ui:UXML>

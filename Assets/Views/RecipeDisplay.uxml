@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Button text="&#10;" selectable="true" name="SelectButton" style="padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; flex-direction: row; justify-content: center; height: 100%;">
+        <ui:ListView virtualization-method="DynamicHeight" fixed-item-height="100" name="InputItems" focusable="false" style="flex-direction: column; width: 50%;"/>
+        <ui:VisualElement style="flex-grow: 1; top: 0; bottom: 0; flex-direction: column; align-items: center; justify-content: center;">
+            <ui:Label text="-&gt;" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0;"/>
+            <ui:Label text="0 sec." name="CraftingTime" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; font-size: 8px;"/>
+        </ui:VisualElement>
+        <ui:ListView name="OutputItems" fixed-item-height="22" virtualization-method="DynamicHeight" focusable="false" style="width: 50%;"/>
+    </ui:Button>
+</ui:UXML>
