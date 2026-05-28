@@ -55300,7 +55300,7 @@ MonoBehaviour:
   mainDocument: {fileID: 2134189686}
   recipeDisplayTemplate: {fileID: 9197481963319205126, guid: 36da0af754680468f80087441ccf1975, type: 3}
   itemDisplayTemplate: {fileID: 9197481963319205126, guid: c472b8f4c551a46dda559dc144fc977d, type: 3}
-  debugRecipeList: {fileID: 11400000, guid: 9084ee5f781cc46bf8acbe43906b2ad8, type: 2}
+  debugRecipeList: {fileID: 0}
 --- !u!4 &2134189688
 Transform:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class RecipeAssignmentUI : MonoBehaviour
 
     [SerializeField] private RecipeListSO debugRecipeList;
 
+    private VisualElement background;
     private ListView recipeListView;
     private Label assignmentLabel;
 
@@ -22,6 +23,7 @@ public class RecipeAssignmentUI : MonoBehaviour
         var root = mainDocument.rootVisualElement;
         recipeListView = root.Q<ListView>("RecipeList");
         assignmentLabel = root.Q<Label>("AssignLabel");
+        background = root.Q<VisualElement>("Background");
 
         // Assign how the recipe list is created and displayed;
         recipeListView.makeItem = () => recipeDisplayTemplate.CloneTree();
@@ -32,7 +34,7 @@ public class RecipeAssignmentUI : MonoBehaviour
         }
         else
         {
-            gameObject.SetActive(false);    
+            background.visible = false;
         }
     }
 
@@ -43,12 +45,18 @@ public class RecipeAssignmentUI : MonoBehaviour
             throw new InvalidOperationException("RecipeAssignmentUI instance does not exist. Please add one to the scene.");
         }
 
+        Debug.Log($"Opening ui for {machineName} with list {recipeList}");
         instance.OpenRecipeAssignUI(machineName, recipeList, onSelectedRecipe);
     }
 
     public void OpenRecipeAssignUI(string machineName, RecipeListSO recipeList, Action<RecipeSO> onSelectedRecipe)
     {
-        gameObject.SetActive(true);
+        if (recipeList == null)
+        {
+            throw new InvalidOperationException("Recipe List is not assigned. Please ensure that a valid RecipeListSO instance is passed through.");
+        }
+
+        background.visible = true;
         assignmentLabel.text = $"Assigning recipe for {machineName}";
         recipeListView.itemsSource = recipeList.SupportedRecipes;
         
@@ -75,7 +83,7 @@ public class RecipeAssignmentUI : MonoBehaviour
             var selectedRecipe = recipeList.SupportedRecipes[index];
             Debug.Log($"Selected {selectedRecipe.name}");
             onSelectedRecipe?.Invoke(selectedRecipe);
-            gameObject.SetActive(false);
+            background.visible = false;
         };
 
         // Need to populate the input/output lists with recipe ins/outs

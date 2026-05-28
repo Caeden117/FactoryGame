@@ -7,7 +7,8 @@ public class Crafter : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    [SerializeField] private RecipeSO recipe;
+    [SerializeField] private RecipeListSO recipeList;
+    private RecipeSO recipe;
 
 
     // ##### METHODS #####
@@ -74,7 +75,7 @@ public class Crafter : AbstractBuilding
     override internal void Act()
     {
         ActTimer -= Time.deltaTime;
-        if (ActTimer <= 0)
+        if (ActTimer <= 0 && recipe != null)
         {
             bool canCraft = Craft();
             bool canSend = false;
@@ -82,7 +83,7 @@ public class Crafter : AbstractBuilding
             {
                 if(0 < Outventory[output.Item.Id])
                 {
-                    if(Send(output.Item.Id, Receivers[0]))
+                    if(Receivers.Count > 0 && Send(output.Item.Id, Receivers[0]))
                     {
                         canSend = true;
                         break;
@@ -99,14 +100,8 @@ public class Crafter : AbstractBuilding
     // @brief Runs on creation of a crafter building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        Cooldown = recipe.CraftingTime;
-        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
-        { 
-            AcceptedResources[ingredient.Item.Id] = true;
-        }
-        Progress = 0.0f;
         IsRunning = false;
-        ActTimer = Cooldown;
+
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
@@ -127,4 +122,26 @@ public class Crafter : AbstractBuilding
         }
     }
 
+    private void OnMouseUp() 
+    {
+        RecipeAssignmentUI.Open(nameof(Crafter), recipeList, (selectedRecipe) =>
+        {
+            // Update recipe properties to match assigned recipe.
+            recipe = selectedRecipe;
+            Cooldown = recipe.CraftingTime;
+            Progress = 0.0f;
+            IsRunning = false;
+            ActTimer = Cooldown;
+
+            // Manually reset and re-assign accepted resources (the recipe can be assigned at any time)
+            for (var i = 0; i < AcceptedResources.Length; i++)
+            {
+                AcceptedResources[i] = false;
+            }
+            foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+            { 
+                AcceptedResources[ingredient.Item.Id] = true;
+            }
+        });
+    }
 }

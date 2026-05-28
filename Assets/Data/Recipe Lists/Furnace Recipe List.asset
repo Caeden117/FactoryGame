@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d6b61bdd56c4e468aae1ffb17c77a226, type: 3}
-  m_Name: Crafting Recipe Tile
+  m_Name: Furnace Recipe List
   m_EditorClassIdentifier: Main::RecipeListSO
   SupportedRecipes:
-  - {fileID: 11400000, guid: 73820ec05dd86394aa8e587be67d8d80, type: 2}
-  - {fileID: 11400000, guid: 78ee780dda927f14bb57c2b977dc0a34, type: 2}
+  - {fileID: 11400000, guid: 1901dd71bd3f54b9395cf729e450f36f, type: 2}
+  - {fileID: 11400000, guid: 4170ec25727fd4bf99238ce092332bab, type: 2}

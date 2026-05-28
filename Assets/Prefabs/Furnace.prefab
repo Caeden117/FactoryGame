@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Main::Furnace
   ConnectionRange: 0.51
+  recipeList: {fileID: 11400000, guid: 1c40d6b6beacb4654aa0e447a8d774d5, type: 2}
 --- !u!65 &5485895640364327046
 BoxCollider:
   m_ObjectHideFlags: 0
