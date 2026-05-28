@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b61bdd56c4e468aae1ffb17c77a226, type: 3}
+  m_Name: Miner Recipe List
+  m_EditorClassIdentifier: Main::RecipeListSO
+  SupportedRecipes:
+  - {fileID: 11400000, guid: 231a93b25645f4543b13dc8f26f67996, type: 2}
+  - {fileID: 11400000, guid: 8375ec037a7f05e45a036a1cbfb52692, type: 2}
