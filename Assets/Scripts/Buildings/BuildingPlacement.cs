@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 
 public class BuildingPlacement : MonoBehaviour
 {
+    internal static bool IsCreatingGhost { get; private set; } = false;
     private bool isBuildMode = false;                           // Build Mode must be active to place buildings
     private bool isDeleteMode = false;                          // Delete mode removes placed buildings instead of placing new ones
     [SerializeField] private GameObject[] buildPrefabs = new GameObject[7];      // Array of all buildings that can be placed
@@ -139,7 +140,9 @@ public class BuildingPlacement : MonoBehaviour
             ghost = null;
         }
 
+        IsCreatingGhost = true;
         ghost = Instantiate(selectedPrefab, GetSnappedPosition(), GetPlacementRotation());
+        IsCreatingGhost = false;
         MakeGhostVisualOnly(ghost);
         ghost.SetActive(true);
     }
