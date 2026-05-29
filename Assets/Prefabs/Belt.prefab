@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1346634057574603066}
@@ -139,12 +139,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Main::Belt
   ConnectionRange: 0.51
   Tiles: 1
-  ItemsPerTile: 8
+  ItemsPerTile: 6
   itemLibrary: {fileID: 11400000, guid: fde7cdbfcea65493a8ecaa0d2fd386f7, type: 2}
-  slots: 00000000
+  slots: 000000000000000000000000000000000000000000000000
   slotVisuals:
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
