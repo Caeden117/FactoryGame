@@ -243,7 +243,8 @@ public class Belt : AbstractBuilding
         {
             slotVisual = new GameObject($"Item_{slotIndex}");
             slotVisual.transform.SetParent(visualRoot, false);
-            slotVisual.transform.localScale = Vector3.one * 0.22f;
+            // Set local scale to determine item size on belt
+            slotVisual.transform.localScale = Vector3.one * 0.30f;
 
             var spriteRenderer = slotVisual.AddComponent<SpriteRenderer>();
             spriteRenderer.sprite = GetItemSprite(resourceID);
@@ -268,7 +269,8 @@ public class Belt : AbstractBuilding
         var t = totalSlots <= 1 ? 0.5f : 1f - ((float)slotIndex / (totalSlots - 1));
         var beltLength = Mathf.Max(1f, Tiles);
         var localX = Mathf.Lerp(-beltLength * 0.5f, beltLength * 0.5f, t);
-        return new Vector3(localX, 0.15f, 0f);
+        // Can change y value here to determine item position on belt
+        return new Vector3(localX, 0f, 0f);
     }
 
     private static Sprite GetSharedItemSprite()
