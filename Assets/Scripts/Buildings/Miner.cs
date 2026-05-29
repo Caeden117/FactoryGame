@@ -8,6 +8,7 @@ public class Miner : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected ItemSO miningResource = null;
+    protected int outputID = -1;
 
 
     // ##### METHODS #####
@@ -50,7 +51,7 @@ public class Miner : AbstractBuilding
         if (ActTimer <= 0)
         {
             var canMine = Mine();
-            var canSend = Receivers.Count > 0 && Send(miningResource.Id, Receivers[0]);
+            var canSend = Receivers.Count > 0 && Send(outputID, Receivers[0]);
             TogglePower(canMine || canSend);
             ResetProgress();
         }
@@ -60,12 +61,9 @@ public class Miner : AbstractBuilding
     // @brief Runs on creation of a miner building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        OnCreate();
-    }
-
-    private void OnCreate()
-    {
-        Cooldown = 2.0f;
+        tm = (TilemapChunk)FindAnyObjectByType(typeof(TilemapChunk));
+        outputID = tm.GetResourceAt(transform.position).Id;
+        Cooldown = 1.0f;
         Progress = 0.0f;
         IsRunning = true;
         ActTimer = Cooldown;
@@ -80,7 +78,5 @@ public class Miner : AbstractBuilding
         }
         // No sender for Miners as they have no input slot.
     }
-
-
 
 }

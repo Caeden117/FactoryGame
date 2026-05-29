@@ -7,6 +7,8 @@ public class VoidTerminal : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
+    public static int money = 0;
+    [SerializeField] protected ItemLibrarySO il;
     protected int currentID = -1;
 
 
@@ -35,11 +37,11 @@ public class VoidTerminal : AbstractBuilding
       */
     override internal void Act()
     {
-        IsRunning = currentID != -1;
-        if (IsRunning)
+        IsRunning = MinResourceID <= currentID && currentID <= MaxResourceID;
+        if (IsRunning && il != null)
         {
+            money += il.Items[currentID].MoneyValue;
             currentID = -1;
-            // TO-DO: [Future] Implement money counter based on resourceID here.
         }
         return;
     }
@@ -47,11 +49,6 @@ public class VoidTerminal : AbstractBuilding
     // ##### Unity Methods #####
     // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
     void Start()
-    {
-        OnCreate();
-    }
-
-    void OnCreate()
     {
         // Sets all resources to accepted.
         for (int i = 0; i < AcceptedResources.Length; i++)

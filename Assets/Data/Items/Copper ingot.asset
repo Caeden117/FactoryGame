@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2abe6e83aa53e450682769c4ad8ed374, type: 3}
-  m_Name: Copper Ingot
+  m_Name: Copper ingot
   m_EditorClassIdentifier: Main::ItemSO
   DisplayName: Copper Ingot
   Icon: {fileID: -7573354855677281409, guid: db196125c1c02564081283663c2e0234, type: 3}

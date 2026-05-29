@@ -16,6 +16,6 @@ MonoBehaviour:
   - Item: {fileID: 11400000, guid: 0e01e12df24204710b3d1c5d9ea9768e, type: 2}
     Amount: 3
   Outputs:
-  - Item: {fileID: 11400000, guid: dcc0201c82821864fa9a5970dea8386b, type: 2}
+  - Item: {fileID: 11400000, guid: 1f1bf4fa8a23c43a38ba31942346305a, type: 2}
     Amount: 1
   CraftingTime: 3

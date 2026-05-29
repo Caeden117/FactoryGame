@@ -19,27 +19,37 @@ public class Splitter : AbstractBuilding
       */
     override internal void Act()
     {
-        // Two Loops used to mimic a single loop starting partway thru and wrapping around (i.e. [0, 4] starting at 2, ending at 1).
-        // Loop 1: Start at fairness tracker and try to send.
-        for (int i = fairnessTracker; i < Receivers.Count; i++)
+        ActTimer -= Time.deltaTime;
+        if (ActTimer <= 0)
         {
-            if (Receivers[i] != null && Send(currentID, this))
+            // Two Loops used to mimic a single loop starting partway thru and wrapping around (i.e. [0, 4] starting at 2, ending at 1).
+            // Loop 1: Start at fairness tracker and try to send.
+            for (int i = fairnessTracker; i < Receivers.Count; i++)
             {
-                fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
-                return;
+                if (Receivers[i] != null && Send(currentID, Receivers[i]))
+                {
+                    fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
+                    TogglePower(true);
+                    ResetProgress();
+                    return;
+                }
             }
-        }
-        // Loop 2: Start at 0 and go to fairness tracker and try to send.
-        for (int i = 0; i < fairnessTracker; i++)
-        {
-            if (Receivers[i] != null && Send(currentID, this))
+            // Loop 2: Start at 0 and go to fairness tracker and try to send.
+            for (int i = 0; i < fairnessTracker; i++)
             {
-                fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
-                return;
+                if (Receivers[i] != null && Send(currentID, Receivers[i]))
+                {
+                    fairnessTracker = (i + 1) % Receivers.Count;    // Modulus to clamp and wrap values within range.
+                    TogglePower(true);
+                    ResetProgress();
+                    return;
+                }
             }
+            // All sends failed; reset fairness tracker.
+            fairnessTracker = 0;
+            TogglePower(false);
+            ResetProgress();
         }
-        // All sends failed; reset fairness tracker.
-        fairnessTracker = 0;
         return;
     }
 
@@ -51,7 +61,7 @@ public class Splitter : AbstractBuilding
     override protected bool Send(in int resourceID, AbstractBuilding inputReceiver)
     {
         bool validReceiver = inputReceiver != null && Receivers.Contains(inputReceiver);
-        bool canSend = inputReceiver.AcceptedResources[resourceID];
+        bool canSend = resourceID != -1 && inputReceiver.AcceptedResources[resourceID];
         if (canSend && validReceiver)
         {
             if (inputReceiver.Receive(resourceID, this))
@@ -71,7 +81,7 @@ public class Splitter : AbstractBuilding
       */
     override internal bool Receive(in int resourceID, AbstractBuilding inputSender)
     {
-        bool canReceive = currentID == -1 && Outventory[resourceID] < MaxStackSize;
+        bool canReceive = currentID == -1;
         bool validSender = inputSender != null && Senders.Contains(inputSender);
         if (canReceive && validSender)
         {
@@ -92,11 +102,11 @@ public class Splitter : AbstractBuilding
             AcceptedResources[i] = true;
         }
         // Attempt to attach to Receiver building left of merger.
-        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialLeftReceiver, ConnectionRange))
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialLeftReceiver, ConnectionRange))
         {
             if (potentialLeftReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeLeftReceiver))
             {
-                Receivers.Add(toBeLeftReceiver);
+                this.Receivers.Add(toBeLeftReceiver);
                 toBeLeftReceiver.Senders.Add(this);
             }
         }
@@ -105,16 +115,16 @@ public class Splitter : AbstractBuilding
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
-                Receivers.Add(toBeReceiver);
+                this.Receivers.Add(toBeReceiver);
                 toBeReceiver.Senders.Add(this);
             }
         }
         // Attempt to attach to Receiver building right of merger.
-        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialRightReceiver, ConnectionRange))
+        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialRightReceiver, ConnectionRange))
         {
             if (potentialRightReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeRightReceiver))
             {
-                Receivers.Add(toBeRightReceiver);
+                this.Receivers.Add(toBeRightReceiver);
                 toBeRightReceiver.Senders.Add(this);
             }
         }
@@ -128,5 +138,4 @@ public class Splitter : AbstractBuilding
             }
         }
     }
-
 }

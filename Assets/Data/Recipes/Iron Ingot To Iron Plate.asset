@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Iron Ingot To Iron Plate
   m_EditorClassIdentifier: Main::RecipeSO
   Ingredients:
-  - Item: {fileID: 11400000, guid: 3b27003eb8ac81f4db98067fb9955cf8, type: 2}
+  - Item: {fileID: 11400000, guid: ba08401953e7046008562262450ecc30, type: 2}
     Amount: 3
   Outputs:
   - Item: {fileID: 11400000, guid: 148887bfb8b13495385cf2c8a9c045e8, type: 2}

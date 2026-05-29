@@ -14,11 +14,6 @@ public class ItemLibrarySO : ScriptableObject
     /// </summary>
     public ItemSO[] Items;
 
-    /// <summary>
-    /// All registered recipes in the game
-    /// </summary>
-    public RecipeSO[] Recipes;
-
     // Assign IDs to items and recipes based on their index in the array. This allows for easy referencing by ID without needing to serialize the ID field.
     private void OnValidate()
     {
@@ -27,14 +22,6 @@ public class ItemLibrarySO : ScriptableObject
             if (Items[i] != null)
             {
                 Items[i].Id = i;
-            }
-        }
-
-        for (var i = 0; i < Recipes.Length; i++)
-        {
-            if (Items[i] != null)
-            {
-                Recipes[i].Id = i;
             }
         }
     }

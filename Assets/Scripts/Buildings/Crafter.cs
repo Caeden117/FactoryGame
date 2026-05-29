@@ -7,7 +7,8 @@ public class Crafter : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    protected RecipeSO recipe = null;
+    [SerializeField] private RecipeListSO recipeList;
+    private RecipeSO recipe;
 
 
     // ##### METHODS #####
@@ -50,17 +51,20 @@ public class Crafter : AbstractBuilding
     protected bool Craft()
     {
         if (RecipeCheck())
+        {
             // Decreasing ingredient stores according to recipe.
             foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
             {
                 Inventory[ingredient.Item.Id] -= ingredient.Amount;
             }
-        // Increasing output stores according to recipe.
-        foreach (RecipeSO.Output output in recipe.Outputs)
-        {
-            Outventory[output.Item.Id] += output.Amount;
+            // Increasing output stores according to recipe.
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                Outventory[output.Item.Id] += output.Amount;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Method Overrides
@@ -71,9 +75,22 @@ public class Crafter : AbstractBuilding
     override internal void Act()
     {
         ActTimer -= Time.deltaTime;
-        if (ActTimer <= 0)
+        if (ActTimer <= 0 && recipe != null)
         {
-            TogglePower(Craft());
+            bool canCraft = Craft();
+            bool canSend = false;
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                if(0 < Outventory[output.Item.Id])
+                {
+                    if(Receivers.Count > 0 && Send(output.Item.Id, Receivers[0]))
+                    {
+                        canSend = true;
+                        break;
+                    }
+                }
+            }
+            TogglePower(canCraft || canSend);
             ResetProgress();
         }
         return;
@@ -83,10 +100,8 @@ public class Crafter : AbstractBuilding
     // @brief Runs on creation of a crafter building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        Cooldown = 2.0f;
-        Progress = 0.0f;
         IsRunning = false;
-        ActTimer = Cooldown;
+
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
@@ -107,4 +122,26 @@ public class Crafter : AbstractBuilding
         }
     }
 
+    private void OnMouseUp() 
+    {
+        RecipeAssignmentUI.Open(nameof(Crafter), recipeList, (selectedRecipe) =>
+        {
+            // Update recipe properties to match assigned recipe.
+            recipe = selectedRecipe;
+            Cooldown = recipe.CraftingTime;
+            Progress = 0.0f;
+            IsRunning = false;
+            ActTimer = Cooldown;
+
+            // Manually reset and re-assign accepted resources (the recipe can be assigned at any time)
+            for (var i = 0; i < AcceptedResources.Length; i++)
+            {
+                AcceptedResources[i] = false;
+            }
+            foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+            { 
+                AcceptedResources[ingredient.Item.Id] = true;
+            }
+        });
+    }
 }
