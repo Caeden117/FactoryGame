@@ -21,17 +21,20 @@ public class Belt : AbstractBuilding
         ActTimer -= Time.deltaTime;
         if (ActTimer > 0f) return;
 
-        // Push the item at the front into the first receiver if possible.
-        if (Receivers.Count > 0 && slots.Length > 0)
+        if (slots.Length > 0)
         {
-            var frontItem = slots[0];
-            if (frontItem != emptySlot)
+            // Push the item at the front into the first receiver if possible.
+            if (Receivers.Count > 0)
             {
-                var receiver = Receivers[0];
-                if (receiver != null && Send(frontItem, receiver))
+                var frontItem = slots[0];
+                if (frontItem != emptySlot)
                 {
-                    slots[0] = emptySlot;
-                    DestroySlotVisual(0);
+                    var receiver = Receivers[0];
+                    if (receiver != null && Send(frontItem, receiver))
+                    {
+                        slots[0] = emptySlot;
+                        DestroySlotVisual(0);
+                    }
                 }
             }
 
@@ -55,6 +58,7 @@ public class Belt : AbstractBuilding
     // Unity Methods
     private void Awake()
     {
+        if (BuildingPlacement.IsCreatingGhost) return;
         OnCreate();
     }
 
@@ -266,9 +270,10 @@ public class Belt : AbstractBuilding
     private Vector3 GetSlotLocalPosition(int slotIndex)
     {
         var totalSlots = Mathf.Max(1, slots.Length);
-        var t = totalSlots <= 1 ? 0.5f : 1f - ((float)slotIndex / (totalSlots - 1));
         var beltLength = Mathf.Max(1f, Tiles);
-        var localX = Mathf.Lerp(-beltLength * 0.5f, beltLength * 0.5f, t);
+        var step = beltLength / totalSlots;
+        var indexFromStart = totalSlots - 1 - slotIndex;
+        var localX = (-beltLength * 0.5f) + (step * 0.5f) + (step * indexFromStart);
         // Can change y value here to determine item position on belt
         return new Vector3(localX, 0f, 0f);
     }
