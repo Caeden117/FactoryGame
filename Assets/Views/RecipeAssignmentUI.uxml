@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; right: auto; top: auto; bottom: auto; left: auto; background-color: rgba(0, 0, 0, 0.5);">
+        <ui:VisualElement name="RecipeMenu" style="top: 25%; left: 25%; width: 50%; height: 50%; background-color: rgb(105, 105, 105);">
+            <ui:Label text="Assigning recipe for {BUILDING_NAME}..." name="AssignLabel" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0; padding-top: 8px; padding-right: 8px; padding-bottom: 8px; padding-left: 8px; font-size: 16px;"/>
+            <ui:ListView name="RecipeList" fixed-item-height="75" virtualization-method="FixedHeight" style="align-items: stretch; min-height: 88%;"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -8,6 +8,7 @@ public class Miner : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected ItemSO miningResource = null;
+    protected int outputID = -1;
 
 
     // ##### METHODS #####
@@ -50,7 +51,7 @@ public class Miner : AbstractBuilding
         if (ActTimer <= 0)
         {
             var canMine = Mine();
-            var canSend = Receivers.Count > 0 && Send(miningResource.Id, Receivers[0]);
+            var canSend = Receivers.Count > 0 && Send(outputID, Receivers[0]);
             TogglePower(canMine || canSend);
             ResetProgress();
         }
@@ -61,11 +62,7 @@ public class Miner : AbstractBuilding
     private void Start()
     {
         tm = (TilemapChunk)FindAnyObjectByType(typeof(TilemapChunk));
-        OnCreate();
-    }
-
-    private void OnCreate()
-    {
+        outputID = tm.GetResourceAt(transform.position).Id;
         Cooldown = 1.0f;
         Progress = 0.0f;
         IsRunning = true;
@@ -81,7 +78,5 @@ public class Miner : AbstractBuilding
         }
         // No sender for Miners as they have no input slot.
     }
-
-
 
 }

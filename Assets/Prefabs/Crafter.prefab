@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Main::Crafter
   ConnectionRange: 0.51
+  recipeList: {fileID: 11400000, guid: 9084ee5f781cc46bf8acbe43906b2ad8, type: 2}
 --- !u!65 &5485895640364327046
 BoxCollider:
   m_ObjectHideFlags: 0

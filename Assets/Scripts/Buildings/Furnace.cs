@@ -7,8 +7,8 @@ public class Furnace : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    private RecipeSO Recipe = null;
-    [SerializeField] private RecipeSO[] FurnaceRecipes = new RecipeSO[2];
+    [SerializeField] private RecipeListSO recipeList;
+    private RecipeSO recipe;
 
 
     // ##### METHODS #####
@@ -21,12 +21,12 @@ public class Furnace : AbstractBuilding
     protected bool RecipeCheck()
     {
         // Edge Case Handling: No recipe set.
-        if (Recipe == null)
+        if (recipe == null)
         {
             return false;
         }
         // Checking that sufficient ingredients are stored.
-        foreach (var ingredient in Recipe.Ingredients)
+        foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
         {
             if (Inventory[ingredient.Item.Id] < ingredient.Amount)
             {
@@ -34,7 +34,7 @@ public class Furnace : AbstractBuilding
             }
         }
         // Checking that there is room for the output.
-        foreach (var output in Recipe.Outputs)
+        foreach (RecipeSO.Output output in recipe.Outputs)
         {
             if (MaxStackSize < Outventory[output.Item.Id] + output.Amount)
             {
@@ -51,44 +51,59 @@ public class Furnace : AbstractBuilding
     protected bool Smelt()
     {
         if (RecipeCheck())
+        {
             // Decreasing ingredient stores according to recipe.
-            foreach (var ingredient in Recipe.Ingredients)
+            foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
             {
                 Inventory[ingredient.Item.Id] -= ingredient.Amount;
             }
-        // Increasing output stores according to recipe.
-        foreach (var output in Recipe.Outputs)
-        {
-            Outventory[output.Item.Id] += output.Amount;
+            // Increasing output stores according to recipe.
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                Outventory[output.Item.Id] += output.Amount;
+            }
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Method Overrides
     /**
       * @brief The function called during the onUpdate() override.
+      * @returns A boolean of whether or not the send action succeeded.
       */
-    internal override void Act()
+    override internal void Act()
     {
         ActTimer -= Time.deltaTime;
-        if (ActTimer <= 0)
+        if (ActTimer <= 0 && recipe != null)
         {
-            TogglePower(Smelt());
+            bool canSmelt = Smelt();
+            bool canSend = false;
+            foreach (RecipeSO.Output output in recipe.Outputs)
+            {
+                if(0 < Outventory[output.Item.Id])
+                {
+                    if(Receivers.Count > 0 && Send(output.Item.Id, Receivers[0]))
+                    {
+                        canSend = true;
+                        break;
+                    }
+                }
+            }
+            TogglePower(canSmelt || canSend);
             ResetProgress();
         }
         return;
     }
 
-    // Unity Methods 
-    // @brief Runs on creation of a furnace building. Used for assigning initial cooldown and attached buildings.
+    // Unity Methods
+    // @brief Runs on creation of a crafter building. Used for assigning initial cooldown and attached buildings.
     private void Start()
     {
-        Cooldown = 2.0f;
-        Progress = 0.0f;
         IsRunning = false;
-        ActTimer = Cooldown;
+
         // Attempt to attach to Receiver building.
-        if (Physics.Raycast(transform.position, transform.right, out var potentialReceiver, ConnectionRange))
+        if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
             if (potentialReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeReceiver))
             {
@@ -97,7 +112,7 @@ public class Furnace : AbstractBuilding
             }
         }
         // Attempt to attach to Sender building.
-        if (Physics.Raycast(transform.position, -transform.right, out var potentialSender, ConnectionRange))
+        if (Physics.Raycast(transform.position, -transform.right, out RaycastHit potentialSender, ConnectionRange))
         {
             if (potentialSender.transform.gameObject.TryGetComponent(out AbstractBuilding toBeSender))
             {
@@ -107,4 +122,26 @@ public class Furnace : AbstractBuilding
         }
     }
 
+    private void OnMouseUp() 
+    {
+        RecipeAssignmentUI.Open(nameof(Furnace), recipeList, (selectedRecipe) =>
+        {
+            // Update recipe properties to match assigned recipe.
+            recipe = selectedRecipe;
+            Cooldown = recipe.CraftingTime;
+            Progress = 0.0f;
+            IsRunning = false;
+            ActTimer = Cooldown;
+
+            // Manually reset and re-assign accepted resources (the recipe can be assigned at any time)
+            for (var i = 0; i < AcceptedResources.Length; i++)
+            {
+                AcceptedResources[i] = false;
+            }
+            foreach (RecipeSO.Ingredient ingredient in recipe.Ingredients)
+            { 
+                AcceptedResources[ingredient.Item.Id] = true;
+            }
+        });
+    }
 }
