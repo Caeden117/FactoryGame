@@ -9,6 +9,8 @@ public class Crafter : AbstractBuilding
     // ##### MEMBER VARIABLE OVERRIDES #####
     [SerializeField] private RecipeListSO recipeList;
     private RecipeSO recipe;
+    [SerializeField] protected GameObject RecipeScreenOriginal;
+    private GameObject recipeScreen;
 
 
     // ##### METHODS #####
@@ -101,6 +103,7 @@ public class Crafter : AbstractBuilding
     private void Start()
     {
         IsRunning = false;
+        recipeScreen = Instantiate(RecipeScreenOriginal, transform.position, transform.rotation);
 
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
@@ -132,6 +135,9 @@ public class Crafter : AbstractBuilding
             Progress = 0.0f;
             IsRunning = false;
             ActTimer = Cooldown;
+            if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+            recipeSr.sprite = recipe.Outputs[0].Item.Icon;
+
 
             // Manually reset and re-assign accepted resources (the recipe can be assigned at any time)
             for (var i = 0; i < AcceptedResources.Length; i++)

@@ -9,6 +9,8 @@ public class Furnace : AbstractBuilding
     // ##### MEMBER VARIABLE OVERRIDES #####
     [SerializeField] private RecipeListSO recipeList;
     private RecipeSO recipe;
+    [SerializeField] protected GameObject RecipeScreenOriginal;
+    private GameObject recipeScreen;
 
 
     // ##### METHODS #####

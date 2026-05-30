@@ -102,7 +102,7 @@ public class Splitter : AbstractBuilding
             AcceptedResources[i] = true;
         }
         // Attempt to attach to Receiver building left of merger.
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit potentialLeftReceiver, ConnectionRange))
+        if (Physics.Raycast(transform.position, transform.up, out RaycastHit potentialLeftReceiver, ConnectionRange))
         {
             if (potentialLeftReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeLeftReceiver))
             {
@@ -120,7 +120,7 @@ public class Splitter : AbstractBuilding
             }
         }
         // Attempt to attach to Receiver building right of merger.
-        if (Physics.Raycast(transform.position, -transform.forward, out RaycastHit potentialRightReceiver, ConnectionRange))
+        if (Physics.Raycast(transform.position, -transform.up, out RaycastHit potentialRightReceiver, ConnectionRange))
         {
             if (potentialRightReceiver.transform.gameObject.TryGetComponent(out AbstractBuilding toBeRightReceiver))
             {
