@@ -103,7 +103,10 @@ public class Crafter : AbstractBuilding
     private void Start()
     {
         IsRunning = false;
-        recipeScreen = Instantiate(RecipeScreenOriginal, transform.position, transform.rotation);
+        recipeScreen = Instantiate(RecipeScreenOriginal, transform.position + (transform.right * -0.213f), transform.rotation * Quaternion.Euler(0f, 0f, 90f), transform);
+        recipeScreen.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+            recipeSr.sortingOrder = 21;
 
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
@@ -136,9 +139,7 @@ public class Crafter : AbstractBuilding
             IsRunning = false;
             ActTimer = Cooldown;
             if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
-            recipeSr.sprite = recipe.Outputs[0].Item.Icon;
-
-
+                recipeSr.sprite = recipe.Outputs[0].Item.Icon;
             // Manually reset and re-assign accepted resources (the recipe can be assigned at any time)
             for (var i = 0; i < AcceptedResources.Length; i++)
             {
