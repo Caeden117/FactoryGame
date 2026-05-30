@@ -8,7 +8,7 @@ public class Merger : AbstractBuilding
 
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected int currentID = -1;
-    [SerializeField] protected int fairnessTracker = 0;  // Used for distributing evenly when multiple receivers maintain open states.
+    protected int fairnessTracker = 0;  // Used for distributing evenly when multiple receivers maintain open states.
     protected int oldFairness = 0;
 
     // ##### METHODS #####
@@ -58,7 +58,7 @@ public class Merger : AbstractBuilding
         ActTimer -= Time.deltaTime;
         if (ActTimer <= 0)
         {
-            if(oldFairness == fairnessTracker)
+            if(oldFairness == fairnessTracker && 0 < Senders.Count)
                 fairnessTracker = (fairnessTracker + 1) % Senders.Count;
             TogglePower(0 < Receivers.Count && Send(currentID, Receivers[0]));
             ResetProgress();
@@ -77,7 +77,6 @@ public class Merger : AbstractBuilding
         {
             AcceptedResources[i] = true;
         }
-        Debug.Log($"Before: R:{Receivers.Count} | S:{Senders.Count}.");
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out RaycastHit potentialReceiver, ConnectionRange))
         {
@@ -85,7 +84,6 @@ public class Merger : AbstractBuilding
             {
                 Receivers.Add(toBeReceiver);
                 toBeReceiver.Senders.Add(this);
-                Debug.Log($"R0: {potentialReceiver.transform.position}.");
             }
         }
         // Attempt to attach to Sender building left of merger.
@@ -95,7 +93,6 @@ public class Merger : AbstractBuilding
             {
                 Senders.Add(toBeLeftSender);
                 toBeLeftSender.Receivers.Add(this);
-                Debug.Log($"S0: {potentialLeftSender.transform.position}.");
             }
         }
         // Attempt to attach to Sender building in behind merger.
@@ -105,7 +102,6 @@ public class Merger : AbstractBuilding
             {
                 Senders.Add(toBeSender);
                 toBeSender.Receivers.Add(this);
-                Debug.Log($"S1: {potentialSender.transform.position}.");
             }
         }
         // Attempt to attach to Sender building right of merger.
@@ -115,10 +111,8 @@ public class Merger : AbstractBuilding
             {
                 Senders.Add(toBeRightSender);
                 toBeRightSender.Receivers.Add(this);
-                Debug.Log($"S2: {potentialRightSender.transform.position}.");
             }
         }
-        Debug.Log($"After: R:{Receivers.Count} | S:{Senders.Count}.");
     }
 
 }

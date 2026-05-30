@@ -138,6 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Main::Miner
   ConnectionRange: 0.51
+  RecipeScreenOriginal: {fileID: 5465281168427098428, guid: 79c04212882dd6d459eb7f1cb112c37a, type: 3}
 --- !u!65 &5485895640364327046
 BoxCollider:
   m_ObjectHideFlags: 0

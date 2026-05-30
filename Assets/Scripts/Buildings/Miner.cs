@@ -9,6 +9,8 @@ public class Miner : AbstractBuilding
     // ##### MEMBER VARIABLE OVERRIDES #####
     protected ItemSO miningResource = null;
     protected int outputID = -1;
+    [SerializeField] protected GameObject RecipeScreenOriginal;
+    private GameObject recipeScreen;
 
 
     // ##### METHODS #####
@@ -21,6 +23,8 @@ public class Miner : AbstractBuilding
     protected bool Mine()
     {
         miningResource = tm.GetResourceAt(transform.position);
+        if(miningResource != null && recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+            recipeSr.sprite = miningResource.Icon;
         if (miningResource != null && tm.DrillResourceAt(transform.position))
         {
             Outventory[miningResource.Id]++;
@@ -67,6 +71,10 @@ public class Miner : AbstractBuilding
         Progress = 0.0f;
         IsRunning = true;
         ActTimer = Cooldown;
+        recipeScreen = Instantiate(RecipeScreenOriginal, transform.position + (transform.right * -0.213f), transform.rotation * Quaternion.Euler(0f, 0f, 90f), transform);
+        recipeScreen.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+            recipeSr.sortingOrder = 21;
         // Attempt to attach to Receiver building.
         if (Physics.Raycast(transform.position, transform.right, out var potentialReceiver, ConnectionRange))
         {

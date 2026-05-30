@@ -9,6 +9,8 @@ public class VoidTerminal : AbstractBuilding
     // ##### MEMBER VARIABLE OVERRIDES #####
     [SerializeField] protected ItemLibrarySO il;
     protected int currentID = -1;
+    [SerializeField] protected GameObject RecipeScreenOriginal;
+    private GameObject recipeScreen;
 
 
     // ##### METHODS #####
@@ -25,6 +27,8 @@ public class VoidTerminal : AbstractBuilding
         if (currentID == -1)
         {
             currentID = resourceID;
+            if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+                recipeSr.sprite = il.Items[currentID].Icon;
             return true;
         }
         return false;
@@ -36,12 +40,21 @@ public class VoidTerminal : AbstractBuilding
       */
     override internal void Act()
     {
-        IsRunning = MinResourceID <= currentID && currentID <= MaxResourceID;
-        if (IsRunning && il != null)
+        ActTimer -= Time.deltaTime;
+        if (ActTimer <= 0)
         {
-            // Update Money State with sold item
-            MoneyState.Add(il.Items[currentID].MoneyValue);
-            currentID = -1;
+            IsRunning = MinResourceID <= currentID && currentID <= MaxResourceID;
+            if (IsRunning && il != null)
+            {
+                // Update Money State with sold item
+                MoneyState.Add(il.Items[currentID].MoneyValue);
+                currentID = -1;
+            } else {
+                if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+                    recipeSr.sprite = null;
+            }
+            TogglePower(IsRunning);
+            ResetProgress();
         }
         return;
     }
@@ -50,6 +63,10 @@ public class VoidTerminal : AbstractBuilding
     // @brief Runs on creation of a void terminal building. Used for assigning initial cooldown and attached buildings.
     void Start()
     {
+        recipeScreen = Instantiate(RecipeScreenOriginal, transform.position + (transform.right * -0.213f), transform.rotation * Quaternion.Euler(0f, 0f, 90f), transform);
+        recipeScreen.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        if(recipeScreen.TryGetComponent<SpriteRenderer>(out SpriteRenderer recipeSr))
+            recipeSr.sortingOrder = 21;
         // Sets all resources to accepted.
         for (int i = 0; i < AcceptedResources.Length; i++)
         {
