@@ -15,7 +15,7 @@ public class ItemLibrarySO : ScriptableObject
     public ItemSO[] Items;
 
     // Assign IDs to items and recipes based on their index in the array. This allows for easy referencing by ID without needing to serialize the ID field.
-    private void OnValidate()
+    private void OnEnable()
     {
         for (var i = 0; i < Items.Length; i++)
         {
