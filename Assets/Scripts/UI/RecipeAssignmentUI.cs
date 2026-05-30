@@ -78,13 +78,13 @@ public class RecipeAssignmentUI : MonoBehaviour
         craftingTime.text = $"{recipe.CraftingTime:F2} sec.";
 
         // Clicking button = assigning recipe, notify to user.
-        button.clicked += () =>
-        {    
+        button.clickable = new Clickable(() =>
+        {
             var selectedRecipe = recipeList.SupportedRecipes[index];
             Debug.Log($"Selected {selectedRecipe.name}");
             onSelectedRecipe?.Invoke(selectedRecipe);
             background.visible = false;
-        };
+        });
 
         // Need to populate the input/output lists with recipe ins/outs
         inputListView.makeItem = () => itemDisplayTemplate.CloneTree();
