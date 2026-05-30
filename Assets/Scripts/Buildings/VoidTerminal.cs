@@ -7,7 +7,6 @@ public class VoidTerminal : AbstractBuilding
 {
 
     // ##### MEMBER VARIABLE OVERRIDES #####
-    public static int money = 0;
     [SerializeField] protected ItemLibrarySO il;
     protected int currentID = -1;
 
@@ -40,7 +39,8 @@ public class VoidTerminal : AbstractBuilding
         IsRunning = MinResourceID <= currentID && currentID <= MaxResourceID;
         if (IsRunning && il != null)
         {
-            money += il.Items[currentID].MoneyValue;
+            // Update Money State with sold item
+            MoneyState.Add(il.Items[currentID].MoneyValue);
             currentID = -1;
         }
         return;
@@ -66,5 +66,4 @@ public class VoidTerminal : AbstractBuilding
             }
         }
     }
-
 }
